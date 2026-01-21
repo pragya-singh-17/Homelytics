@@ -1,3 +1,10 @@
+run 
+
+frontend  cd c:\homelytics11\image-to-image-generation; npm run dev
+
+backend 
+cd c:\homelytics11\image-to-image-generation\backend; .\venv\Scripts\Activate.ps1; python app.py
+
 # 🏠 Homelytics - AI-Powered Interior Design Platform
 
 Transform your room ideas into stunning visualizations using AI-powered image generation with smart budget planning and direct purchase links. Optimized for local GPU execution with NVIDIA RTX 3050 6GB.

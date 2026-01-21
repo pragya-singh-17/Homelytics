@@ -565,14 +565,16 @@ def generate_room():
             if device == "cpu":
                 print("⏳ This will take 30-60 seconds on CPU...")
             
-            # Generate with optimized settings to preserve structure and add items
+            # Generate with settings that ADD furniture clearly
+            # Higher strength = more changes to image (furniture will appear)
+            # Higher guidance = follow prompt more strictly
             generated_image = pipe(
                 prompt=full_prompt,
                 negative_prompt=negative_prompt,
                 image=input_image,
-                strength=0.65,           # Lowered to 0.65 to better preserve original structure
-                guidance_scale=15.0,     # Balanced at 15.0 for good prompt following while maintaining structure
-                num_inference_steps=70   # 70 steps for high quality generation
+                strength=0.75,           # INCREASED to 0.75 - will add furniture more visibly
+                guidance_scale=12.0,     # Balanced guidance for natural results
+                num_inference_steps=50   # 50 steps is sufficient
             ).images[0]
             
             # Clear GPU cache after generation
