@@ -1,25 +1,143 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { motion } from 'framer-motion'
-import { Upload, Sparkles, Loader2, Download, Share2, IndianRupee } from 'lucide-react'
+import { Upload, Sparkles, Loader2, Download, Share2, IndianRupee, Wand2 } from 'lucide-react'
 import axios from 'axios'
+
+// Utility to convert data URI to blob URL for better performance
+const dataURIToBlob = (dataURI) => {
+  const byteString = atob(dataURI.split(',')[1])
+  const mimeString = dataURI.split(',')[0].match(/:(.*?);/)[1]
+  const ab = new ArrayBuffer(byteString.length)
+  const ia = new Uint8Array(ab)
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i)
+  }
+  return new Blob([ab], { type: mimeString })
+}
+
+const dataToBlobURL = (dataURI) => {
+  try {
+    const blob = dataURIToBlob(dataURI)
+    return URL.createObjectURL(blob)
+  } catch (error) {
+    console.error('Error converting data URI to blob URL:', error)
+    return dataURI // Fallback to original data URI
+  }
+}
+
+// Custom Before/After Comparison Component (replaces broken react-compare-image)
+const BeforeAfterComparison = ({ beforeImage, afterImage, beforeLabel = "Before", afterLabel = "After" }) => {
+  const [sliderPos, setSliderPos] = useState(50)
+  const containerRef = useRef(null)
+
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const newPos = ((e.clientX - rect.left) / rect.width) * 100
+    setSliderPos(Math.max(0, Math.min(100, newPos)))
+  }
+
+  const handleTouchMove = (e) => {
+    if (!containerRef.current) return
+    const rect = containerRef.current.getBoundingClientRect()
+    const touch = e.touches[0]
+    const newPos = ((touch.clientX - rect.left) / rect.width) * 100
+    setSliderPos(Math.max(0, Math.min(100, newPos)))
+  }
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative w-full overflow-hidden rounded-2xl bg-gray-200 shadow-2xl select-none"
+      onMouseMove={handleMouseMove}
+      onTouchMove={handleTouchMove}
+      onMouseUp={() => {}}
+      style={{ cursor: 'col-resize' }}
+    >
+      {/* Container for images */}
+      <div className="relative w-full" style={{ paddingBottom: '100%' }}>
+        {/* Before image (full background) */}
+        <img
+          src={beforeImage}
+          alt={beforeLabel}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+
+        {/* After image (overlaid, clipped by slider position) */}
+        <div
+          className="absolute inset-0 w-full h-full overflow-hidden"
+          style={{ width: `${sliderPos}%` }}
+        >
+          <img
+            src={afterImage}
+            alt={afterLabel}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ width: `${100 / (sliderPos / 100)}%` }}
+          />
+        </div>
+
+        {/* Slider line */}
+        <div
+          className="absolute top-0 bottom-0 w-1 bg-blue-500 shadow-lg"
+          style={{ left: `${sliderPos}%`, transform: 'translateX(-50%)' }}
+        >
+          {/* Slider handle */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-blue-500">
+            <div className="flex gap-1">
+              <div className="w-1 h-4 bg-blue-500 rounded-full" />
+              <div className="w-1 h-4 bg-blue-500 rounded-full" />
+            </div>
+          </div>
+        </div>
+
+        {/* Labels */}
+        <div className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-lg text-sm font-medium">
+          {beforeLabel}
+        </div>
+        <div className="absolute top-4 right-4 bg-blue-600/80 text-white px-3 py-1 rounded-lg text-sm font-medium">
+          {afterLabel}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function AIGeneration() {
   const [image, setImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [generatedImage, setGeneratedImage] = useState(null)
+  const [generatedImageBlobURL, setGeneratedImageBlobURL] = useState(null)
   const [prompt, setPrompt] = useState('')
   const [roomType, setRoomType] = useState('living-room')
   const [style, setStyle] = useState('modern')
   const [isGenerating, setIsGenerating] = useState(false)
   const [showPricing, setShowPricing] = useState(false)
   const [estimatedPrice, setEstimatedPrice] = useState(null)
+  const blobURLRef = useRef(null)
   
   // Budget feature states
   const [budget, setBudget] = useState(100000)
   const [showBudgetSuggestions, setShowBudgetSuggestions] = useState(false)
   const [budgetSuggestions, setBudgetSuggestions] = useState(null)
   const [roomDimensions, setRoomDimensions] = useState({ length: '', width: '', height: '' })
+
+  // ── IMPROVEMENT 6: Prompt improvement states ──
+  const [isImprovingPrompt, setIsImprovingPrompt] = useState(false)
+  const [originalPrompt, setOriginalPrompt] = useState(null)
+
+  // ── IMPROVEMENT 7: Before/After comparison state ──
+  const [originalImage, setOriginalImage] = useState(null)
+  const [showComparison, setShowComparison] = useState(false)
+
+  // Cleanup blob URL when component unmounts or image changes
+  useEffect(() => {
+    return () => {
+      if (blobURLRef.current) {
+        URL.revokeObjectURL(blobURLRef.current)
+      }
+    }
+  }, [])
 
   const roomTypes = [
     'Living Room',
@@ -50,6 +168,8 @@ export default function AIGeneration() {
     const reader = new FileReader()
     reader.onload = () => {
       setImagePreview(reader.result)
+      // Store for before/after comparison (Improvement 7)
+      setOriginalImage(reader.result)
     }
     reader.readAsDataURL(file)
   }, [])
@@ -105,6 +225,39 @@ export default function AIGeneration() {
     }
   }
 
+  // ── IMPROVEMENT 6: Improve Prompt Handler ──
+  const handleImprovePrompt = async () => {
+    if (!prompt.trim()) {
+      alert('Please enter a prompt first!')
+      return
+    }
+
+    setIsImprovingPrompt(true)
+    try {
+      const response = await fetch('http://localhost:5000/improve-prompt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prompt: prompt,
+          room_type: roomType.replace('-', ' '),
+          style: style
+        })
+      })
+      const data = await response.json()
+      if (data.error) {
+        alert('Prompt improvement failed: ' + data.error)
+        return
+      }
+      setOriginalPrompt(prompt)
+      setPrompt(data.improved_prompt)
+    } catch (err) {
+      console.error('Prompt improvement failed:', err)
+      alert('Could not reach the backend. Make sure the server is running.')
+    } finally {
+      setIsImprovingPrompt(false)
+    }
+  }
+
   const handleGenerate = async () => {
     if (!image) {
       alert('Please upload an image first!')
@@ -122,7 +275,15 @@ export default function AIGeneration() {
 
     setIsGenerating(true)
     setGeneratedImage(null)
+    setGeneratedImageBlobURL(null)
     setEstimatedPrice(null)
+    setShowComparison(false)
+    
+    // Clean up previous blob URL
+    if (blobURLRef.current) {
+      URL.revokeObjectURL(blobURLRef.current)
+      blobURLRef.current = null
+    }
 
     try {
       const formData = new FormData()
@@ -134,18 +295,51 @@ export default function AIGeneration() {
       // LOCAL BACKEND: Running on your RTX 3050 GPU
       const BACKEND_URL = 'http://localhost:5000/api/generate'
       
+      console.log('Sending generation request...')
       const response = await axios.post(BACKEND_URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         },
-        responseType: 'json'
+        responseType: 'json',
+        timeout: 300000 // 5 minute timeout for generation
       })
 
-      setGeneratedImage(response.data.image)
+      console.log('Response received:', {
+        hasImage: !!response.data?.image,
+        hasPricing: !!response.data?.pricing,
+        mode: response.data?.mode,
+        message: response.data?.message
+      })
+
+      // Check for errors in response
+      if (response.data?.error) {
+        throw new Error(response.data.error)
+      }
+
+      if (!response.data?.image) {
+        throw new Error('No image in response. Backend may be in demo mode.')
+      }
+
+      // Validate that the image data is not empty
+      if (response.data.image.length < 100) {
+        throw new Error('Image data is too small or invalid')
+      }
+
+      console.log(`Image data received: ${response.data.image.substring(0, 50)}...`)
+      
+      // Convert data URI to blob URL for better performance
+      const blobURL = dataToBlobURL(response.data.image)
+      blobURLRef.current = blobURL
+      
+      setGeneratedImage(response.data.image) // Keep original for download
+      setGeneratedImageBlobURL(blobURL) // Use blob URL for display
       setEstimatedPrice(response.data.pricing)
+      setShowComparison(true)
+      console.log('Image display state updated successfully')
     } catch (error) {
       console.error('Generation error:', error)
-      alert('Failed to generate image. Make sure the backend server is running.')
+      const errorMsg = error.response?.data?.error || error.message || 'Failed to generate image'
+      alert(`Generation failed: ${errorMsg}\n\nMake sure:\n1. Backend server is running\n2. GPU drivers are installed\n3. Models have finished downloading`)
     } finally {
       setIsGenerating(false)
     }
@@ -154,12 +348,17 @@ export default function AIGeneration() {
   const handleDownload = () => {
     if (!generatedImage) return
 
-    const link = document.createElement('a')
-    link.href = generatedImage
-    link.download = `homelytics-design-${Date.now()}.png`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    try {
+      const link = document.createElement('a')
+      link.href = generatedImage // Use original data URI for download
+      link.download = `homelytics-design-${Date.now()}.png`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (error) {
+      console.error('Download error:', error)
+      alert('Failed to download image')
+    }
   }
 
   const handleShare = async () => {
@@ -458,17 +657,67 @@ export default function AIGeneration() {
               )}
             </div>
 
-            {/* Prompt Input */}
+            {/* Prompt Input + Improve Button (Improvement 6) */}
             <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                ✍️ Furniture Items
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-semibold text-gray-900">
+                  ✍️ Furniture Items
+                </h2>
+                {/* ── IMPROVEMENT 6: Improve Prompt Button ── */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleImprovePrompt}
+                  disabled={isImprovingPrompt || !prompt.trim()}
+                  className={`px-4 py-2 rounded-xl font-medium text-sm flex items-center gap-2 transition-all duration-200 shadow-md ${
+                    isImprovingPrompt || !prompt.trim()
+                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white hover:from-purple-600 hover:to-indigo-700'
+                  }`}
+                >
+                  {isImprovingPrompt ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Improving...
+                    </>
+                  ) : (
+                    <>
+                      <Wand2 className="w-4 h-4" />
+                      ✨ Improve My Prompt
+                    </>
+                  )}
+                </motion.button>
+              </div>
               <textarea
                 value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
+                onChange={(e) => {
+                  setPrompt(e.target.value)
+                  // Clear original prompt display if user edits manually
+                  if (originalPrompt) setOriginalPrompt(null)
+                }}
                 placeholder="Click 'Get Budget Suggestions' above, or manually type: sofa, coffee table, lamp, rug..."
                 className="w-full h-32 px-4 py-3 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200 hover:border-blue-300"
               />
+              {/* Show original prompt after improvement (Improvement 6) */}
+              {originalPrompt && (
+                <motion.div
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-2 p-3 bg-gray-50 rounded-xl border border-gray-200"
+                >
+                  <p className="text-xs text-gray-400 mb-1 font-medium">Original prompt:</p>
+                  <p className="text-sm text-gray-500 italic">{originalPrompt}</p>
+                  <button
+                    onClick={() => {
+                      setPrompt(originalPrompt)
+                      setOriginalPrompt(null)
+                    }}
+                    className="mt-2 text-xs text-blue-500 hover:text-blue-700 font-medium underline"
+                  >
+                    ↩ Revert to original
+                  </button>
+                </motion.div>
+              )}
             </div>
 
             {/* Generate Button */}
@@ -532,14 +781,54 @@ export default function AIGeneration() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="space-y-4"
               >
-                <motion.img
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                  src={generatedImage}
-                  alt="Generated room"
-                  className="w-full rounded-2xl shadow-2xl"
-                />
+                {/* ── IMPROVEMENT 7: Before/After Comparison Slider ── */}
+                {showComparison && originalImage && generatedImageBlobURL ? (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3 text-gray-800 flex items-center gap-2">
+                      🔄 Before / After Comparison
+                    </h3>
+                    <div className="rounded-2xl overflow-hidden">
+                      <BeforeAfterComparison
+                        beforeImage={originalImage}
+                        afterImage={generatedImageBlobURL}
+                        beforeLabel="Original Room"
+                        afterLabel="AI Furnished Room"
+                      />
+                    </div>
+                    <button
+                      onClick={() => setShowComparison(false)}
+                      className="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium underline"
+                    >
+                      Show generated image only
+                    </button>
+                  </div>
+                ) : generatedImageBlobURL ? (
+                  <div>
+                    <motion.img
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                      src={generatedImageBlobURL}
+                      alt="Generated room"
+                      className="w-full rounded-2xl shadow-2xl object-contain"
+                      onError={(e) => {
+                        console.error('Image failed to load:', e)
+                        // Fallback to data URI if blob URL fails
+                        if (generatedImage) {
+                          e.target.src = generatedImage
+                        }
+                      }}
+                    />
+                    {originalImage && (
+                      <button
+                        onClick={() => setShowComparison(true)}
+                        className="mt-3 text-sm text-blue-600 hover:text-blue-800 font-medium underline"
+                      >
+                        🔄 Show before/after comparison
+                      </button>
+                    )}
+                  </div>
+                ) : null}
                 
                 {/* Action Buttons */}
                 <div className="flex gap-3">

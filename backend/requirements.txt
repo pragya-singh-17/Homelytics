@@ -8,3 +8,5 @@ transformers==4.44.0
 accelerate==0.34.0
 peft==0.17.1
 safetensors
+controlnet_aux
+requests
