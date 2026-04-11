@@ -10,7 +10,13 @@ import threading
 
 from PIL import Image, ImageDraw
 import torch
-from diffusers import StableDiffusionImg2ImgPipeline, StableDiffusionPipeline
+from diffusers import (
+    StableDiffusionControlNetImg2ImgPipeline,
+    StableDiffusionPipeline,
+    ControlNetModel,
+)
+from controlnet_aux import MidasDetector
+import requests as req
 
 app = Flask(__name__)
 CORS(app)
@@ -22,7 +28,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(GENERATED_FOLDER, exist_ok=True)
 
 # Model Configuration
-MODEL_ID = "SG161222/Realistic_Vision_V5.1_noVAE"
+MODEL_ID = "runwayml/stable-diffusion-v1-5"
+CONTROLNET_MODEL_ID = "lllyasviel/sd-controlnet-depth"
 device = "cuda" if torch.cuda.is_available() else "cpu"
 USE_LOCAL_MODEL = os.environ.get("USE_LOCAL_MODEL", "true").lower() != "false"
 
@@ -31,65 +38,172 @@ HF_TOKEN = os.environ.get("HF_TOKEN", None)  # Set as environment variable or pa
 
 # HF_TOKEN = " " # Alternatively, paste your token here
 
+# ─── GROQ API KEY ──────────────────────────────────────────────────
+# FILL IN YOUR GROQ API KEY HERE
+# Get a free key at: https://console.groq.com
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "YOUR_GROQ_API_KEY")
+# ────────────────────────────────────────────────────────────────────
+
+
+def is_valid_groq_key(api_key):
+    """Return True only when a non-placeholder Groq key is configured."""
+    key = (api_key or "").strip()
+    if not key:
+        return False
+    if key == "YOUR_GROQ_API_KEY":
+        return False
+    return key.startswith("gsk_")
+
+# ─── IMPROVEMENT 1: Negative Prompt ────────────────────────────────
+NEGATIVE_PROMPT = (
+    "people, person, human figure, cartoon, anime, blurry, watermark, text, logo, "
+    "low quality, deformed furniture, extra rooms, different architecture, ceiling removed, "
+    "floating objects, distorted walls, ugly, oversaturated, unrealistic lighting, "
+    "wrong perspective, missing walls, open ceiling, outdoor scene, exterior view"
+)
+
+
+# ─── IMPROVEMENT 1: Structured Prompt Builder ──────────────────────
+def build_structured_prompt(user_prompt, room_type, style):
+    """Wrap the user's raw prompt in a professional interior-design template."""
+    return (
+        f"Interior design photograph, {room_type}, {style} style, "
+        f"photorealistic, professionally staged, {user_prompt}, "
+        f"all furniture clearly visible, well-lit room, 8K, "
+        f"high detail, interior photography, warm ambient lighting, "
+        f"realistic materials and textures, architectural digest style"
+    )
+
+def is_already_structured_prompt(prompt_text):
+    """Detect whether input prompt already looks like an SD-style structured prompt."""
+    p = (prompt_text or "").lower()
+    markers = [
+        "interior design photograph",
+        "photorealistic",
+        "architectural digest style",
+        "professionally staged",
+    ]
+    return any(marker in p for marker in markers)
+
+
+def shorten_prompt_for_clip(prompt_text, max_words=70):
+    """Keep prompt under CLIP token pressure so key furniture terms are not truncated."""
+    words = (prompt_text or "").split()
+    if len(words) <= max_words:
+        return prompt_text
+    return " ".join(words[:max_words])
+
+
+# ─── IMPROVEMENT 4: Furniture Extraction & Enforcement ─────────────
+FURNITURE_KEYWORDS = [
+    "bed", "sofa", "couch", "table", "lamp", "chair", "wardrobe",
+    "bookshelf", "desk", "rug", "curtain", "mirror", "shelf",
+    "cabinet", "dresser", "nightstand", "bench", "stool", "plant",
+    "tv", "television", "fan", "ac", "air conditioner", "painting"
+]
+
+
+def extract_furniture_items(prompt):
+    """Extract recognized furniture keywords from the user prompt."""
+    prompt_lower = (prompt or "").lower().replace("_", " ")
+    found_items = []
+    for item in FURNITURE_KEYWORDS:
+        item_pattern = re.escape(item).replace("\\ ", r"\\s+")
+        # Match singular/plural forms (e.g., sofa/sofas, lamp/lamps)
+        if re.search(rf"\b{item_pattern}s?\b", prompt_lower):
+            found_items.append(item)
+    return found_items
+
+
+def enforce_furniture_in_prompt(base_prompt, furniture_items):
+    """Append an explicit enforcement clause so SD doesn't forget items."""
+    if not furniture_items:
+        return base_prompt
+    items_string = ", ".join(furniture_items)
+    enforcement = (
+        f" Must include: {items_string}. "
+        f"All listed furniture clearly visible."
+    )
+    # Keep enforcement first so it survives CLIP prompt truncation.
+    return enforcement + " " + base_prompt
+
+
+# ─── IMPROVEMENT 2: ControlNet + Depth Map Pipeline ────────────────
 # Load model only if local mode is enabled
 pipe = None
+depth_estimator = None
+
 if USE_LOCAL_MODEL:
     print(f"Loading model on {device}...")
     if device == "cpu":
         print("WARNING: Running on CPU will be VERY slow (30-60 seconds per image)")
         print("Recommended: Use GPU or set USE_LOCAL_MODEL=False")
-    
+
     try:
         # RTX 3050 6GB Optimizations
         print("Optimizing for RTX 3050 (6GB VRAM)...")
 
         my_dtype = torch.float16 if device == "cuda" else torch.float32
-        
-        pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
+
+        # Load depth estimator (Midas)
+        print("Loading Midas depth estimator...")
+        depth_estimator = MidasDetector.from_pretrained("lllyasviel/Annotators")
+        print("Depth estimator loaded")
+
+        # Load ControlNet depth model
+        print("Loading ControlNet depth model...")
+        controlnet = ControlNetModel.from_pretrained(
+            CONTROLNET_MODEL_ID,
+            torch_dtype=my_dtype,
+        )
+        print("ControlNet loaded")
+
+        # Load the full pipeline with ControlNet
+        print("Loading Stable Diffusion + ControlNet pipeline...")
+        pipe = StableDiffusionControlNetImg2ImgPipeline.from_pretrained(
             MODEL_ID,
-            torch_dtype=my_dtype,  
+            controlnet=controlnet,
+            torch_dtype=my_dtype,
             use_auth_token=HF_TOKEN,
             low_cpu_mem_usage=True,
-            safety_checker=None,  # Disable safety checker to save VRAM
-            requires_safety_checker=False
+            safety_checker=None,
+            requires_safety_checker=False,
         )
-        
-        # Move to GPU
-        pipe = pipe.to(device)
-        
+
         if device == "cuda":
             # Enable memory optimizations
             try:
-                pipe.enable_xformers_memory_efficient_attention()
-                print("xFormers memory efficient attention enabled")
-            except:
-                print("xFormers not available, using standard attention")
-            
-            # Enable model CPU offload for 6GB VRAM
-            try:
                 pipe.enable_model_cpu_offload()
                 print("Model CPU offload enabled (saves VRAM)")
-            except:
+            except Exception:
                 pipe = pipe.to(device)
-                print("CPU offload not available")
-            
+                print("CPU offload not available, moved to GPU directly")
+
+            try:
+                pipe.enable_xformers_memory_efficient_attention()
+                print("xFormers memory efficient attention enabled")
+            except Exception:
+                print("xFormers not available, using standard attention")
+
             # Enable attention slicing (reduces memory usage)
             try:
                 pipe.enable_attention_slicing(1)
                 print("Attention slicing enabled")
-            except:
+            except Exception:
                 pass
-            
+
             # Enable VAE slicing
             try:
                 pipe.enable_vae_slicing()
                 print("VAE slicing enabled")
-            except:
+            except Exception:
                 pass
-        
+        else:
+            pipe = pipe.to(device)
+
         print(f"Model loaded successfully on {device}")
         print("VRAM usage optimized for 6GB GPU")
-        
+
     except Exception as e:
         print(f"Model loading failed: {e}")
         print("Make sure you have:")
@@ -681,6 +795,63 @@ def estimate_furniture_pricing(room_type, style, prompt, uploaded_image=None):
         'total': total
     }
 
+
+# ─── IMPROVEMENT 2 & 5: ControlNet Generation + Two-Stage Hi-Res ──
+def generate_with_controlnet(image_pil, prompt, negative_prompt, strength=0.70):
+    """
+    Generate an image using ControlNet depth conditioning.
+    Extracts a depth map from the original image so the room structure
+    (walls, windows, floor) is preserved during generation.
+    """
+    if depth_estimator is None or design_pipe is None:
+        raise RuntimeError("Models not loaded. Check startup logs.")
+
+    # Extract depth map from the original room image
+    depth_image = depth_estimator(image_pil)
+
+    result = design_pipe(
+        prompt=prompt,
+        negative_prompt=negative_prompt,
+        image=image_pil,
+        control_image=depth_image,
+        strength=strength,
+        num_inference_steps=50,
+        guidance_scale=8.5,
+        controlnet_conditioning_scale=0.45,
+    ).images[0]
+
+    return result
+
+
+def two_stage_generation(image_pil, prompt, negative_prompt):
+    """
+    IMPROVEMENT 5: Two-stage generation (hi-res fix).
+    Stage 1 — Full ControlNet generation (adds furniture, preserves room).
+    Stage 2 — Light refinement pass (sharpens details, keeps layout).
+    """
+    # Stage 1: Main generation with ControlNet (high strength)
+    stage1_result = generate_with_controlnet(
+        image_pil, prompt, negative_prompt, strength=0.82
+    )
+
+    # Stage 2: Detail refinement pass (very low strength — only adds detail)
+    # Uses the same pipeline but without ControlNet conditioning in the
+    # second pass to avoid re-altering structure. We simply pass the
+    # stage-1 output back as a standard img2img with low strength.
+    stage2_result = design_pipe(
+        prompt=prompt,
+        negative_prompt=negative_prompt,
+        image=stage1_result,
+        control_image=depth_estimator(stage1_result),
+        strength=0.18,
+        num_inference_steps=30,
+        guidance_scale=8.0,
+        controlnet_conditioning_scale=0.2,
+    ).images[0]
+
+    return stage2_result
+
+
 @app.route('/api/suggest-furniture', methods=['POST'])
 def suggest_furniture():
     """
@@ -703,6 +874,84 @@ def suggest_furniture():
         print(f"Error in suggest_furniture: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+
+# ─── IMPROVEMENT 3: Groq Prompt Improvement Route ──────────────────
+@app.route('/improve-prompt', methods=['POST'])
+def improve_prompt():
+    """
+    Use Groq LLM to expand a short user prompt into a detailed,
+    Stable-Diffusion-optimized interior-design prompt.
+    """
+    data = request.json
+    user_prompt = data.get('prompt', '')
+    room_type = data.get('room_type', 'living room')
+    style = data.get('style', 'modern')
+
+    if not user_prompt.strip():
+        return jsonify({"error": "Prompt cannot be empty"}), 400
+
+    # Fast path: if API key is missing/placeholder, provide local improvement.
+    if not is_valid_groq_key(GROQ_API_KEY):
+        fallback = build_structured_prompt(user_prompt.strip(), room_type, style)
+        return jsonify({
+            "improved_prompt": fallback,
+            "original_prompt": user_prompt,
+            "source": "local-fallback",
+            "warning": "Groq API key is missing or invalid. Using local prompt enhancement.",
+        })
+
+    try:
+        groq_response = req.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {GROQ_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={
+                    "model": "llama-3.1-8b-instant",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are an expert Stable Diffusion prompt engineer "
+                            "specializing in interior design. Take the user's simple furniture "
+                            "request and rewrite it as a highly detailed SD prompt. Include: "
+                            "specific material descriptions, lighting quality, spatial positioning "
+                            "of each furniture item, photorealism keywords, and style consistency. "
+                            "Make sure EVERY furniture item the user mentions is included explicitly. "
+                            "Output ONLY the improved prompt. No explanation. No preamble."
+                        ),
+                    },
+                    {
+                        "role": "user",
+                        "content": f"Room: {room_type}. Style: {style}. User wants: {user_prompt}",
+                    },
+                ],
+                "max_tokens": 300,
+            },
+            timeout=15,
+        )
+
+        groq_response.raise_for_status()
+        improved = groq_response.json()["choices"][0]["message"]["content"]
+        return jsonify({
+            "improved_prompt": improved,
+            "original_prompt": user_prompt,
+            "source": "groq",
+        })
+
+    except Exception as e:
+        print(f"Groq API error: {e}")
+        # Fallback: return a locally-built structured prompt
+        fallback = build_structured_prompt(user_prompt.strip(), room_type, style)
+        return jsonify({
+            "improved_prompt": fallback,
+            "original_prompt": user_prompt,
+            "source": "local-fallback",
+            "warning": "Groq API unavailable, using local prompt enhancement.",
+        })
+
+
 @app.route('/api/generate', methods=['POST'])
 def generate_room():
     try:
@@ -720,85 +969,42 @@ def generate_room():
         
         # Detect items upfront so we can reuse results for prompt + pricing
         pricing_preview = estimate_furniture_pricing(room_type, style, prompt, input_image)
-        requested_items_text = ', '.join(item['name'] for item in pricing_preview['items'])
         
-        # Build enhanced prompt for realistic results
-        style_adjectives = {
-            'modern': 'sleek modern',
-            'contemporary': 'contemporary elegant',
-            'traditional': 'classic traditional',
-            'minimalist': 'minimalist clean',
-            'industrial': 'industrial urban',
-            'scandinavian': 'scandinavian cozy',
-            'bohemian': 'bohemian eclectic',
-            'rustic': 'rustic warm'
-        }
-        
-        style_desc = style_adjectives.get(style, style)
+        # ── IMPROVEMENT 1 + 4: Build structured prompt with enforcement ──
         room_name = room_type.replace('-', ' ')
-        
-        # Parse items from prompt for better control
         prompt_clean = prompt.strip()
-        items_reference = requested_items_text if requested_items_text else prompt_clean
-        
-        # Build highly detailed and explicit prompt
-        if prompt_clean:
-            full_prompt = (
-                f"professional interior design photography, {style_desc} {room_name}, "
-                f"MUST include every furniture piece listed: {items_reference or 'user requested items'}, "
-                f"follow user instructions exactly: {prompt_clean}, "
-                f"show every listed item clearly and completely, "
-                f"maintain exact colors and finishes from the prompt, "
-                f"{style} style decor, "
-                f"preserve room walls and structure, "
-                f"ultra detailed, 8k resolution, photorealistic, perfect composition"
-            )
-            
-            # Very specific negative prompt
-            negative_prompt = (
-                f"missing furniture, missing items, incomplete furniture, invisible items, "
-                f"blurry, low quality, distorted, deformed, cartoon, painting, drawing, "
-                f"extra items not listed, wrong furniture, different furniture, "
-                f"incorrect colors, wrong colors, different colors, "
-                f"missing {items_reference or prompt_clean}, incomplete {items_reference or prompt_clean}, "
-                f"abstract, artistic, unrealistic, partial objects"
-            )
+
+        # Step 1: Build the structured prompt
+        # Step 1: Build structured prompt only when needed.
+        if is_already_structured_prompt(prompt_clean):
+            structured_prompt = prompt_clean
         else:
-            # No specific items - just apply style transformation
-            full_prompt = (
-                f"professional interior design photography, {style_desc} {room_name}, "
-                f"{style} style interior, "
-                f"preserve room structure and layout, "
-                f"photorealistic, highly detailed, 8k, perfect lighting"
-            )
-            
-            negative_prompt = (
-                f"blurry, low quality, distorted, deformed, cartoon, painting, drawing, "
-                f"extra furniture, random objects, unrealistic"
-            )
-        
+            structured_prompt = build_structured_prompt(prompt_clean, room_name, style)
+
+        # Step 2: Extract and enforce furniture items
+        furniture_items = extract_furniture_items(prompt_clean)
+        final_prompt = enforce_furniture_in_prompt(structured_prompt, furniture_items)
+        final_prompt = shorten_prompt_for_clip(final_prompt, max_words=70)
+
+        # Use the global negative prompt (Improvement 1)
+        negative = NEGATIVE_PROMPT
+
         # Generate image
         if USE_LOCAL_MODEL and design_pipe is not None:
-            print(f"Generating with local model on {device}...")
-            print(f"Full Prompt: {full_prompt}")
-            print(f"Negative: {negative_prompt[:80]}...")
+            print(f"Generating with ControlNet on {device}...")
+            print(f"Final Prompt: {final_prompt}")
+            print(f"Negative: {negative[:80]}...")
+            print(f"Furniture items detected: {furniture_items}")
             
             if device == "cpu":
-                print("This will take 30-60 seconds on CPU...")
+                print("This will take 60-120 seconds on CPU with ControlNet...")
             
-            # Generate with settings that ADD furniture clearly
-            # Higher strength = more changes to image (furniture will appear)
-            # Higher guidance = follow prompt more strictly
+            # ── IMPROVEMENT 2 + 5: ControlNet + Two-Stage generation ──
             with inference_lock:
                 activate_pipeline("design")
-                generated_image = design_pipe(
-                    prompt=full_prompt,
-                    negative_prompt=negative_prompt,
-                    image=input_image,
-                    strength=0.75,
-                    guidance_scale=12.0,
-                    num_inference_steps=50
-                ).images[0]
+                generated_image = two_stage_generation(
+                    input_image, final_prompt, negative
+                )
             
             # Clear GPU cache after generation
             if device == "cuda":
@@ -818,12 +1024,15 @@ def generate_room():
         return jsonify({
             'image': image_to_base64(generated_image),
             'pricing': pricing,
+            'furniture_detected': furniture_items,
             'message': 'Image generated successfully' if USE_LOCAL_MODEL and design_pipe is not None else 'Demo mode active',
             'mode': 'local' if USE_LOCAL_MODEL and design_pipe is not None else 'demo'
         })
         
     except Exception as e:
         print(f"Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 
@@ -860,8 +1069,8 @@ def generate_layout():
                     num_images_per_prompt=4,
                     num_inference_steps=30,
                     guidance_scale=8.5,
+                    width=LAYOUT_IMAGE_SIZE,
                     height=LAYOUT_IMAGE_SIZE,
-                    width=LAYOUT_IMAGE_SIZE
                 )
                 layouts = result.images
 
@@ -894,10 +1103,12 @@ def health_check():
         'device': device,
         'model': THREE_D_MODEL_ID,
         'layout_model': LAYOUT_MODEL_ID,
+        'controlnet_model': CONTROLNET_MODEL_ID,
         'mode': 'local' if USE_LOCAL_MODEL else 'demo',
         'gpu_available': torch.cuda.is_available(),
         'layout_lora_loaded': layout_lora_loaded,
-        'layout_ready': layout_pipe is not None
+        'layout_ready': layout_pipe is not None,
+        'depth_estimator_ready': depth_estimator is not None,
     })
 
 if __name__ == '__main__':
@@ -905,9 +1116,11 @@ if __name__ == '__main__':
     print("HOMELYTICS BACKEND SERVER")
     print("="*60)
     print(f"Device: {device}")
-    print(f"3D Model: {THREE_D_MODEL_ID}")
+    print(f"Model: {THREE_D_MODEL_ID}")
+    print(f"ControlNet: {CONTROLNET_MODEL_ID}")
     print(f"2D Model: {LAYOUT_MODEL_ID}")
     print(f"Local Model: {'Loaded' if USE_LOCAL_MODEL and design_pipe else 'Disabled (Demo Mode)'}")
+    print(f"Depth Estimator: {'Ready' if depth_estimator else 'Not loaded'}")
     print(f"Layout Model: {'Loaded' if layout_pipe else 'Unavailable'}")
     if device == "cpu" and USE_LOCAL_MODEL:
         print("\nWARNING: Running on CPU!")
