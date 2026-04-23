@@ -10,3 +10,4 @@ peft==0.17.1
 safetensors
 controlnet_aux
 requests
+python-dotenv==1.0.1

@@ -58,12 +58,12 @@ export default function LayoutGenerator() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-sm" style={{ border: '1px solid rgba(233,69,96,0.25)', background: 'rgba(255,255,255,0.85)', color: 'rgb(var(--color-coral))', backdropFilter: 'blur(8px)' }}>
+          <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-sm" style={{ border: '1px solid rgb(var(--color-coral) / 0.25)', background: 'rgb(var(--color-card) / 0.9)', color: 'rgb(var(--color-coral))', backdropFilter: 'blur(8px)' }}>
             <Building2 className="h-4 w-4" />
             2D Layout Generator
           </div>
-          <h1 className="mt-5 text-4xl font-extrabold tracking-tight md:text-6xl" style={{ color: 'rgb(var(--color-navy))' }}>
-            Generate four floor plan directions in one pass
+          <h1 className="mt-5 text-4xl font-extrabold tracking-tight md:text-6xl">
+            <span className="gradient-text">Generate four floor plan directions in one pass</span>
           </h1>
           <p className="mx-auto mt-4 max-w-3xl text-lg md:text-xl" style={{ color: 'rgb(var(--fg-secondary))' }}>
             Enter the total area, optionally lock the room count, and let Homelytics draft blueprint-style plan options for quick concept exploration.
@@ -76,11 +76,11 @@ export default function LayoutGenerator() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="overflow-hidden rounded-[32px] shadow-xl backdrop-blur"
-            style={{ border: '1px solid rgb(var(--color-card-border))', background: 'rgba(255,255,255,0.92)' }}
+            style={{ border: '1px solid rgb(var(--color-card-border))', background: 'rgb(var(--color-card) / 0.92)' }}
           >
             <div className="border-b px-6 py-5 text-white" style={{ borderColor: 'rgba(255,255,255,0.10)', background: 'rgb(var(--color-navy))' }}>
               <div className="flex items-center gap-3">
-                <div className="rounded-2xl p-3" style={{ background: 'rgba(233,69,96,0.20)' }}>
+                <div className="rounded-2xl p-3" style={{ background: 'rgb(var(--color-coral) / 0.20)' }}>
                   <Wand2 className="h-6 w-6" style={{ color: 'rgb(var(--color-coral))' }} />
                 </div>
                 <div>
@@ -110,7 +110,7 @@ export default function LayoutGenerator() {
                     background: 'rgb(var(--bg-secondary))',
                     color: 'rgb(var(--fg-primary))',
                   }}
-                  onFocus={e => { e.target.style.borderColor = 'rgb(var(--color-coral))'; e.target.style.background = '#fff'; e.target.style.boxShadow = '0 0 0 3px rgba(233,69,96,0.10)'; }}
+                  onFocus={e => { e.target.style.borderColor = 'rgb(var(--color-coral))'; e.target.style.background = 'rgb(var(--color-card))'; e.target.style.boxShadow = '0 0 0 3px rgb(var(--color-coral) / 0.10)'; }}
                   onBlur={e => { e.target.style.borderColor = 'rgb(var(--color-card-border))'; e.target.style.background = 'rgb(var(--bg-secondary))'; e.target.style.boxShadow = 'none'; }}
                 />
               </div>
@@ -129,7 +129,7 @@ export default function LayoutGenerator() {
                     background: 'rgb(var(--bg-secondary))',
                     color: 'rgb(var(--fg-primary))',
                   }}
-                  onFocus={e => { e.target.style.borderColor = 'rgb(var(--color-coral))'; e.target.style.boxShadow = '0 0 0 3px rgba(233,69,96,0.10)'; }}
+                  onFocus={e => { e.target.style.borderColor = 'rgb(var(--color-coral))'; e.target.style.boxShadow = '0 0 0 3px rgb(var(--color-coral) / 0.10)'; }}
                   onBlur={e => { e.target.style.borderColor = 'rgb(var(--color-card-border))'; e.target.style.boxShadow = 'none'; }}
                 >
                   {ROOM_OPTIONS.map((option) => (
@@ -140,7 +140,7 @@ export default function LayoutGenerator() {
                 </select>
               </div>
 
-              <div className="rounded-3xl p-5" style={{ background: 'linear-gradient(135deg, rgba(233,69,96,0.06), rgba(26,26,46,0.04))' }}>
+              <div className="rounded-3xl p-5" style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral) / 0.08), rgb(var(--bg-secondary) / 0.8))' }}>
                 <div className="flex items-start gap-3">
                   <Sparkles className="mt-0.5 h-5 w-5" style={{ color: 'rgb(var(--color-coral))' }} />
                   <div>
@@ -184,12 +184,12 @@ export default function LayoutGenerator() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
             className="rounded-[32px] p-6 backdrop-blur"
-            style={{ border: '1px solid rgb(var(--color-card-border))', background: 'rgba(255,255,255,0.88)', boxShadow: 'var(--shadow-xl)' }}
+            style={{ border: '1px solid rgb(var(--color-card-border))', background: 'rgb(var(--color-card) / 0.88)', boxShadow: 'var(--shadow-xl)' }}
           >
             <div className="mb-6 flex flex-col gap-3 pb-5 sm:flex-row sm:items-end sm:justify-between" style={{ borderBottom: '1px solid rgb(var(--color-card-border))' }}>
               <div>
                 <h2 className="text-2xl font-bold" style={{ color: 'rgb(var(--fg-primary))' }}>Generated Options</h2>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm" style={{ color: 'rgb(var(--fg-secondary))' }}>
                   {/* The API returns four PNG layouts as base64 strings and each card can be downloaded directly. */}
                 </p>
               </div>

@@ -5,25 +5,25 @@
 
 :root {
   /* ─ Brand Palette ─ */
-  --color-navy:        26 26 46;       /* #1A1A2E */
-  --color-navy-light:  32 33 60;       /* #20213C */
-  --color-coral:       233 69 96;      /* #E94560 */
-  --color-coral-hover: 210 52 78;
-  --color-surface:     248 247 244;    /* #F8F7F4 */
+  --color-navy:        18 18 26;       /* deep charcoal */
+  --color-navy-light:  34 34 46;
+  --color-coral:       59 130 246;     /* blue accent */
+  --color-coral-hover: 37 99 235;
+  --color-surface:     250 250 248;
   --color-card:        255 255 255;    /* #FFFFFF */
   --color-card-border: 235 235 235;   /* #EBEBEB */
 
   /* ─ Semantic Colors ─ */
-  --primary:       233 69 96;
-  --primary-dark:  210 52 78;
-  --primary-light: 245 140 157;
+  --primary:       59 130 246;
+  --primary-dark:  37 99 235;
+  --primary-light: 96 165 250;
 
   --secondary:       107 114 128;
   --secondary-dark:  55 65 81;
   --secondary-light: 243 244 246;
 
-  --accent:       233 69 96;
-  --accent-hover: 210 52 78;
+  --accent:       59 130 246;
+  --accent-hover: 37 99 235;
 
   --success: 34 197 94;
   --warning: 251 146 60;
@@ -31,18 +31,18 @@
   --info:    59 130 246;
 
   /* ─ Backgrounds ─ */
-  --bg-primary:   248 247 244;   /* warm off-white */
-  --bg-secondary: 243 242 238;
-  --bg-tertiary:  235 234 230;
+  --bg-primary:   249 250 251;
+  --bg-secondary: 243 244 246;
+  --bg-tertiary:  229 231 235;
 
   /* ─ Foregrounds ─ */
-  --fg-primary:   26 26 46;      /* deep navy */
-  --fg-secondary: 75 75 99;
-  --fg-tertiary:  120 120 140;
+  --fg-primary:   17 24 39;
+  --fg-secondary: 55 65 81;
+  --fg-tertiary:  107 114 128;
 
   /* ─ Borders ─ */
-  --border-primary:   235 235 235;
-  --border-secondary: 209 213 219;
+  --border-primary:   209 213 219;
+  --border-secondary: 156 163 175;
 
   /* ─ Typography ─ */
   --font-family:  'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
@@ -102,37 +102,18 @@
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ─────────────── Dark Mode ─────────────── */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fg-primary:   248 247 244;
-    --fg-secondary: 209 213 219;
-    --fg-tertiary:  156 163 175;
-
-    --bg-primary:   20 20 36;
-    --bg-secondary: 26 26 46;
-    --bg-tertiary:  38 38 62;
-
-    --border-primary:   55 55 75;
-    --border-secondary: 75 75 99;
-
-    --color-card:        26 26 46;
-    --color-card-border: 55 55 75;
-  }
-}
-
 .dark {
-  --fg-primary:   248 247 244;
+  --fg-primary:   245 245 245;
   --fg-secondary: 209 213 219;
   --fg-tertiary:  156 163 175;
 
-  --bg-primary:   20 20 36;
-  --bg-secondary: 26 26 46;
-  --bg-tertiary:  38 38 62;
+  --bg-primary:   9 9 11;
+  --bg-secondary: 17 17 24;
+  --bg-tertiary:  26 26 36;
 
-  --border-primary:   55 55 75;
-  --border-secondary: 75 75 99;
+  --border-primary:   63 63 70;
+  --border-secondary: 82 82 91;
 
-  --color-card:        26 26 46;
-  --color-card-border: 55 55 75;
+  --color-card:        24 24 33;
+  --color-card-border: 63 63 70;
 }

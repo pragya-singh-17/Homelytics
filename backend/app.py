@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import base64
 import gc
@@ -6,6 +6,9 @@ from io import BytesIO
 import os
 import re
 import threading
+import uuid
+
+from datetime import datetime
 
 from PIL import Image, ImageDraw
 import torch
@@ -15,15 +18,40 @@ from diffusers import (
     ControlNetModel,
 )
 from controlnet_aux import MidasDetector
+try:
+    from dotenv import load_dotenv
+except Exception:
+    load_dotenv = None
 
 app = Flask(__name__)
 CORS(app)
 
 # Configuration
-UPLOAD_FOLDER = 'uploads'
-GENERATED_FOLDER = 'generated'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ENV_FILE = os.path.join(BASE_DIR, '.env')
+
+# Load backend environment variables early
+if load_dotenv is not None and os.path.exists(ENV_FILE):
+    load_dotenv(ENV_FILE)
+
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+GENERATED_FOLDER = os.path.join(BASE_DIR, 'generated')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(GENERATED_FOLDER, exist_ok=True)
+
+
+def persist_generated_image(image_pil):
+    """Persist generated image to disk and return a relative path."""
+    file_name = f"generated_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}_{uuid.uuid4().hex[:8]}.png"
+    file_path = os.path.join(GENERATED_FOLDER, file_name)
+    image_pil.save(file_path, format='PNG')
+    return f"generated/{file_name}"
+
+
+def build_public_image_url(relative_image_path):
+    """Convert internal image path to a browser-safe URL."""
+    normalized = (relative_image_path or '').lstrip('/')
+    return f"{request.host_url.rstrip('/')}/{normalized}"
 
 # Model Configuration
 MODEL_ID = "SG161222/Realistic_Vision_V5.1_noVAE"
@@ -403,6 +431,21 @@ def image_to_base64(image):
     image.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode()
     return f"data:image/png;base64,{img_str}"
+
+
+@app.route('/generated/<path:filename>', methods=['GET'])
+def serve_generated_file(filename):
+    """Expose generated images for direct browser access."""
+    return send_from_directory(GENERATED_FOLDER, filename)
+
+
+
+
+
+
+
+
+
 
 
 def create_demo_layout(total_area, room_count, variant_index):
@@ -991,11 +1034,16 @@ def generate_room():
             generated_image = input_image
             # You could add simple PIL filters here for demo purposes
         
+        # Persist image file
+        saved_image_path = persist_generated_image(generated_image)
+        saved_image_url = build_public_image_url(saved_image_path)
+
         # Use previously calculated pricing
         pricing = pricing_preview
         
         return jsonify({
             'image': image_to_base64(generated_image),
+            'image_url': saved_image_url,
             'pricing': pricing,
             'furniture_detected': furniture_items,
             'message': 'Image generated successfully' if USE_LOCAL_MODEL and design_pipe is not None else 'Demo mode active',
@@ -1103,4 +1151,4 @@ if __name__ == '__main__':
         print("   Option 3: Set USE_LOCAL_MODEL=False for demo mode")
     print("="*60 + "\n")
     
-    app.run(debug=False, port=5000)
+    app.run(debug=False, port=5000, load_dotenv=False)

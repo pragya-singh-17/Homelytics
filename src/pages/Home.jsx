@@ -79,154 +79,154 @@ export default function Home() {
     <div className="min-h-screen overflow-hidden">
 
       {/* ─────────────────── Hero Section ─────────────────── */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated gradient background — Navy → Coral */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* Dark gradient background */}
         <motion.div
-          style={{ y }}
           className="absolute inset-0"
           style={{
             y,
-            background: 'linear-gradient(135deg, rgb(var(--color-navy)) 0%, rgb(32 20 50) 50%, rgb(var(--color-coral)) 100%)',
+            background: 'linear-gradient(135deg, rgb(9 9 11) 0%, rgb(24 24 33) 50%, rgb(17 17 24) 100%)',
           }}
         >
-          {/* Animated blobs */}
+          {/* Animated accent blobs */}
           <motion.div
             animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            className="absolute top-20 left-20 w-96 h-96 rounded-full blur-3xl"
-            style={{ background: 'rgba(233, 69, 96, 0.20)' }}
+            className="absolute top-10 left-10 w-80 h-80 rounded-full blur-3xl"
+            style={{ background: 'rgb(var(--color-coral) / 0.15)' }}
           />
           <motion.div
             animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
             transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-            className="absolute bottom-20 right-20 w-96 h-96 rounded-full blur-3xl"
-            style={{ background: 'rgba(248, 247, 244, 0.08)' }}
+            className="absolute bottom-10 right-10 w-80 h-80 rounded-full blur-3xl"
+            style={{ background: 'rgb(var(--color-coral) / 0.08)' }}
           />
         </motion.div>
 
         {/* Content */}
         <motion.div
           style={{ opacity }}
-          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+          className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
         >
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, type: 'spring' }}
-            className="mb-6"
+            className="mb-8"
           >
             <span
-              className="inline-block px-6 py-2 rounded-full text-white font-semibold text-sm mb-6"
+              className="inline-block px-5 py-2 rounded-full font-semibold text-xs tracking-wider mb-8"
               style={{
-                background: 'rgba(255,255,255,0.12)',
-                border: '1px solid rgba(255,255,255,0.25)',
+                background: 'rgb(var(--color-coral) / 0.15)',
+                border: '1px solid rgb(var(--color-coral) / 0.4)',
                 backdropFilter: 'blur(12px)',
+                color: 'rgb(var(--color-coral))',
               }}
             >
-              ✨ AI-Powered Interior Design Platform
+              TRANSFORM YOUR INTERIOR
             </span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 text-white leading-tight"
+            transition={{ duration: 0.8, delay: 0.15 }}
+            className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight tracking-tight"
           >
-            Transform Your Space
+            AI-Powered Interior
             <br />
             <span
-              className="bg-clip-text text-transparent"
-              style={{ backgroundImage: 'linear-gradient(90deg, #f8a4b4, #ffd6de)' }}
+              className="text-transparent bg-clip-text font-black"
+              style={{ backgroundImage: 'linear-gradient(90deg, rgb(var(--color-coral)), rgb(var(--primary-light)))' }}
             >
-              with AI Magic
+              Design Solutions
             </span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl mb-10 text-white/90 max-w-3xl mx-auto leading-relaxed font-medium"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed"
+            style={{ color: 'rgb(var(--fg-secondary))' }}
           >
-            Design your dream room in minutes. Upload an empty room photo, draft layout options
-            from square footage, or customize everything yourself with our intuitive drag-and-drop interface.
+            Reimagine spaces instantly. Upload your room, get AI-powered designs, or customize with drag-and-drop.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
             <Link to="/ai-generate">
-              <motion.div
-                whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(0,0,0,0.25)' }}
+              <motion.button
+                whileHover={{ scale: 1.05, y: -4 }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl transition-all group cursor-pointer"
-                style={{ background: '#fff', color: 'rgb(var(--color-navy))' }}
+                className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-base shadow-lg hover:shadow-2xl transition-all group cursor-pointer"
+                style={{ background: 'rgb(var(--color-coral))', color: 'rgb(18, 18, 26)' }}
               >
-                <Sparkles className="w-6 h-6 mr-2 group-hover:rotate-12 transition-transform" style={{ color: 'rgb(var(--color-coral))' }} />
+                <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
                 Start with AI
                 <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </motion.div>
+              </motion.button>
             </Link>
 
             <Link to="/customize">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
+              <motion.button
+                whileHover={{ scale: 1.05, y: -4 }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-lg transition-all group cursor-pointer"
+                className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-base transition-all group cursor-pointer border-2"
                 style={{
-                  background: 'rgba(255,255,255,0.10)',
-                  border: '2px solid rgba(255,255,255,0.30)',
-                  color: '#fff',
+                  background: 'transparent',
+                  borderColor: 'rgb(var(--color-coral) / 0.5)',
+                  color: 'rgb(var(--color-coral))',
                   backdropFilter: 'blur(8px)',
                 }}
               >
-                <PaintBucket className="w-6 h-6 mr-2 group-hover:rotate-12 transition-transform" />
-                Customize Manually
-              </motion.div>
+                <PaintBucket className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                Customize
+              </motion.button>
             </Link>
 
             <Link to="/generate-layout">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
+              <motion.button
+                whileHover={{ scale: 1.05, y: -4 }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-lg transition-all group cursor-pointer"
+                className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-base transition-all group cursor-pointer border-2"
                 style={{
-                  background: 'rgba(26,26,46,0.75)',
-                  border: '2px solid rgba(233,69,96,0.30)',
-                  color: '#fff',
+                  background: 'transparent',
+                  borderColor: 'rgb(var(--border-primary))',
+                  color: 'rgb(var(--fg-secondary))',
                 }}
               >
-                <Building2 className="w-6 h-6 mr-2 group-hover:-rotate-6 transition-transform" style={{ color: '#fda4af' }} />
+                <Building2 className="w-5 h-5 mr-2 group-hover:-rotate-6 transition-transform" />
                 Generate Layout
-              </motion.div>
+              </motion.button>
             </Link>
           </motion.div>
 
-          {/* Floating Stats */}
+          {/* Stats Bar */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1 }}
-            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
+            transition={{ duration: 1, delay: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto"
           >
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
                 whileHover={{ y: -5, scale: 1.04 }}
-                className="rounded-2xl p-4 text-white"
+                className="rounded-xl p-4 backdrop-blur-sm border"
                 style={{
-                  background: 'rgba(255,255,255,0.10)',
-                  border: '1px solid rgba(255,255,255,0.18)',
+                  background: 'rgb(var(--color-coral) / 0.08)',
+                  borderColor: 'rgb(var(--color-coral) / 0.2)',
                   backdropFilter: 'blur(12px)',
                 }}
               >
-                <stat.icon className="w-8 h-8 mx-auto mb-2" style={{ color: '#fda4af' }} />
-                <div className="text-3xl font-bold mb-1">{stat.value}</div>
-                <div className="text-sm text-white/80">{stat.label}</div>
+                <stat.icon className="w-6 h-6 mx-auto mb-2" style={{ color: 'rgb(var(--color-coral))' }} />
+                <div className="text-2xl font-bold mb-1" style={{ color: 'rgb(var(--fg-primary))' }}>{stat.value}</div>
+                <div className="text-xs" style={{ color: 'rgb(var(--fg-secondary))' }}>{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -236,7 +236,7 @@ export default function Home() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-6 left-1/2 transform -translate-x-1/2"
         >
           <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center">
             <motion.div
@@ -250,19 +250,19 @@ export default function Home() {
       </section>
 
       {/* ─────────────────── Three Ways to Design ─────────────────── */}
-      <section className="py-20" style={{ background: 'rgb(var(--color-card))' }}>
+      <section className="section-spacing" style={{ background: 'rgb(var(--bg-primary))' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-16 md:mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--fg-primary))' }}>
               Three Powerful Ways to Design
             </h2>
-            <p className="text-xl max-w-3xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
+            <p className="text-lg md:text-xl max-w-3xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
               Choose instant AI furnishing, blueprint-style layout generation, or full manual control — your space, your way.
             </p>
           </motion.div>
@@ -280,8 +280,8 @@ export default function Home() {
               <div
                 className="p-8 rounded-2xl border-2 shadow-xl h-full flex flex-col"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(233,69,96,0.04) 0%, rgba(233,69,96,0.08) 100%)',
-                  borderColor: 'rgba(233,69,96,0.30)',
+                  background: 'linear-gradient(135deg, rgb(var(--color-coral) / 0.04) 0%, rgb(var(--color-coral) / 0.08) 100%)',
+                  borderColor: 'rgb(var(--color-coral) / 0.30)',
                 }}
               >
                 <div className="flex items-center mb-6">
@@ -292,14 +292,14 @@ export default function Home() {
                     <Sparkles className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold" style={{ color: 'rgb(var(--color-navy))' }}>AI Generation</h3>
+                    <h3 className="text-2xl font-bold" style={{ color: 'rgb(var(--fg-primary))' }}>AI Generation</h3>
                     <p className="font-semibold" style={{ color: 'rgb(var(--color-coral))' }}>Fast & Automatic</p>
                   </div>
                 </div>
 
                 <div className="mb-6 grid grid-cols-2 gap-3">
                   <div className="relative">
-                    <div className="absolute -top-2 -left-2 text-white px-3 py-1 rounded-full text-xs font-bold z-10" style={{ background: 'rgb(var(--color-navy))' }}>Before</div>
+                    <div className="absolute -top-2 -left-2 text-white px-3 py-1 rounded-full text-xs font-bold z-10" style={{ background: 'rgb(var(--color-coral))' }}>Before</div>
                     <div className="aspect-[4/3] rounded-xl flex items-center justify-center border-2" style={{ background: 'rgba(235,234,230,0.8)', borderColor: 'rgb(var(--border-primary))' }}>
                       <div className="text-center"><div className="text-4xl mb-1">🏠</div><p className="text-xs" style={{ color: 'rgb(var(--fg-tertiary))' }}>Empty Room</p></div>
                     </div>
@@ -351,16 +351,16 @@ export default function Home() {
               <div
                 className="p-8 rounded-2xl border-2 shadow-xl h-full flex flex-col"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(26,26,46,0.03) 0%, rgba(26,26,46,0.07) 100%)',
-                  borderColor: 'rgba(26,26,46,0.20)',
+                  background: 'linear-gradient(135deg, rgb(var(--color-coral) / 0.03) 0%, rgb(var(--color-coral) / 0.07) 100%)',
+                  borderColor: 'rgb(var(--color-coral) / 0.20)',
                 }}
               >
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style={{ background: 'rgb(var(--color-navy))' }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style={{ background: 'rgb(var(--color-coral))' }}>
                     <Building2 className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold" style={{ color: 'rgb(var(--color-navy))' }}>2D Layouts</h3>
+                    <h3 className="text-2xl font-bold" style={{ color: 'rgb(var(--fg-primary))' }}>2D Layouts</h3>
                     <p className="font-semibold" style={{ color: 'rgb(var(--fg-secondary))' }}>Fast Concept Planning</p>
                   </div>
                 </div>
@@ -375,11 +375,11 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="rounded-xl border-2 p-4 shadow-lg" style={{ borderColor: 'rgba(26,26,46,0.25)', background: 'rgb(var(--color-card))' }}>
-                    <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'rgb(var(--color-navy))' }}>Output</div>
+                    <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'rgb(var(--fg-primary))' }}>Output</div>
                     <div className="grid grid-cols-2 gap-2">
                       {[1, 2, 3, 4].map(p => (
                         <div key={p} className="aspect-square rounded-lg border p-2" style={{ borderColor: 'rgb(var(--border-primary))', background: 'rgb(var(--bg-secondary))' }}>
-                          <div className="h-full w-full rounded border-2 border-dashed" style={{ borderColor: 'rgb(var(--color-navy))' }} />
+                          <div className="h-full w-full rounded border-2 border-dashed" style={{ borderColor: 'rgb(var(--border-secondary))' }} />
                         </div>
                       ))}
                     </div>
@@ -389,7 +389,7 @@ export default function Home() {
                 <div className="space-y-3 mb-6 flex-grow">
                   {['Enter Area & Room Count', 'Generate 4 Variations', 'Download the Best Option'].map((step, i) => (
                     <div key={i} className="flex items-start p-4 rounded-xl shadow-sm" style={{ background: 'rgb(var(--color-card))' }}>
-                      <div className="w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0" style={{ background: 'rgb(var(--color-navy))' }}>{i + 1}</div>
+                      <div className="w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0" style={{ background: 'rgb(var(--color-coral))' }}>{i + 1}</div>
                       <div>
                         <h4 className="font-bold mb-1" style={{ color: 'rgb(var(--fg-primary))' }}>{step}</h4>
                         <p className="text-sm" style={{ color: 'rgb(var(--fg-secondary))' }}>
@@ -405,9 +405,9 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 group mt-auto transition-all"
-                    style={{ background: 'rgb(var(--color-navy))' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgb(var(--color-navy-light))'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'rgb(var(--color-navy))'}
+                    style={{ background: 'rgb(var(--color-coral))' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgb(var(--color-coral-hover))'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'rgb(var(--color-coral))'}
                   >
                     <Building2 className="w-5 h-5 group-hover:-rotate-6 transition-transform" />
                     Generate Layouts
@@ -427,26 +427,26 @@ export default function Home() {
               <div
                 className="p-8 rounded-2xl border-2 shadow-xl h-full flex flex-col"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(233,69,96,0.04) 0%, rgba(26,26,46,0.04) 100%)',
-                  borderColor: 'rgba(233,69,96,0.20)',
+                  background: 'linear-gradient(135deg, rgb(var(--color-coral) / 0.04) 0%, rgb(var(--color-coral) / 0.08) 100%)',
+                  borderColor: 'rgb(var(--color-coral) / 0.20)',
                 }}
               >
                 <div className="flex items-center mb-6">
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center mr-4"
-                    style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral)), rgb(var(--color-navy)))' }}
+                    style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral)), rgb(var(--color-coral-hover)))' }}
                   >
                     <PaintBucket className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold" style={{ color: 'rgb(var(--color-navy))' }}>Drag & Drop</h3>
+                    <h3 className="text-2xl font-bold" style={{ color: 'rgb(var(--fg-primary))' }}>Drag & Drop</h3>
                     <p className="font-semibold" style={{ color: 'rgb(var(--color-coral))' }}>Full Control</p>
                   </div>
                 </div>
 
                 <div className="mb-6 grid grid-cols-2 gap-3">
                   <div className="relative">
-                    <div className="absolute -top-2 -left-2 text-white px-3 py-1 rounded-full text-xs font-bold z-10" style={{ background: 'rgb(var(--color-navy))' }}>Before</div>
+                    <div className="absolute -top-2 -left-2 text-white px-3 py-1 rounded-full text-xs font-bold z-10" style={{ background: 'rgb(var(--color-coral))' }}>Before</div>
                     <div className="aspect-[4/3] rounded-xl flex items-center justify-center border-2" style={{ background: 'rgba(235,234,230,0.8)', borderColor: 'rgb(var(--border-primary))' }}>
                       <div className="text-center"><div className="text-4xl mb-1">🏠</div><p className="text-xs" style={{ color: 'rgb(var(--fg-tertiary))' }}>Empty Room</p></div>
                     </div>
@@ -469,7 +469,7 @@ export default function Home() {
                     <div key={i} className="flex items-start p-4 rounded-xl shadow-sm" style={{ background: 'rgb(var(--color-card))' }}>
                       <div
                         className="w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0"
-                        style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral)), rgb(var(--color-navy)))' }}
+                        style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral)), rgb(var(--color-coral-hover)))' }}
                       >{i + 1}</div>
                       <div>
                         <h4 className="font-bold mb-1" style={{ color: 'rgb(var(--fg-primary))' }}>{step}</h4>
@@ -486,7 +486,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 group mt-auto transition-all"
-                    style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral)), rgb(var(--color-navy)))' }}
+                    style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral)), rgb(var(--color-coral-hover)))' }}
                   >
                     <PaintBucket className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                     Start Customizing
@@ -499,65 +499,100 @@ export default function Home() {
       </section>
 
       {/* ─────────────────── Features Section ─────────────────── */}
-      <section className="py-20" style={{ background: 'rgb(var(--bg-secondary))' }}>
+      <section className="section-spacing" style={{ background: 'rgb(var(--bg-secondary))' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-16 md:mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--fg-primary))' }}>
               Powerful Features
             </h2>
-            <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
-              Everything you need to design, visualize, and plan your perfect room
+            <p className="text-lg md:text-xl max-w-3xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
+              Everything you need to design, visualize, and plan your perfect room.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
             {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+              <motion.article
+                key={feature.title}
+                initial={{ opacity: 0, y: 28, scale: 0.98 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.08 }}
-                className="feature-card text-center"
+                transition={{ duration: 0.45, delay: index * 0.08, ease: 'easeOut' }}
+                whileHover={{ y: -6, scale: 1.01 }}
+                className={`rounded-2xl p-6 md:p-7 border shadow-sm ${index === 0 ? 'sm:col-span-2 xl:col-span-1' : ''}`}
+                style={{
+                  background: 'rgb(var(--color-card))',
+                  borderColor: 'rgb(var(--border-primary))',
+                  boxShadow: 'var(--shadow-base)',
+                }}
               >
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 mx-auto"
-                  style={{ background: 'rgb(var(--color-coral))' }}
-                >
-                  <feature.icon className="w-6 h-6 text-white" />
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'rgb(var(--color-coral))' }}>
+                    <feature.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="text-xs font-bold tracking-[0.18em] uppercase" style={{ color: 'rgb(var(--fg-tertiary))' }}>
+                    0{index + 1}
+                  </span>
                 </div>
-                <h3 className="text-lg font-semibold mb-2" style={{ color: 'rgb(var(--fg-primary))' }}>
+                <h3
+                  className="text-xl font-bold mb-2"
+                  style={{ color: 'rgb(var(--fg-primary))' }}
+                >
                   {feature.title}
                 </h3>
-                <p className="text-sm" style={{ color: 'rgb(var(--fg-secondary))' }}>
-                  {feature.description}
-                </p>
-              </motion.div>
+                <p className="text-[15px] leading-relaxed" style={{ color: 'rgb(var(--fg-secondary))' }}>{feature.description}</p>
+              </motion.article>
             ))}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="mt-8 md:mt-10 rounded-2xl p-5 md:p-6 border flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+            style={{
+              background: 'linear-gradient(135deg, rgb(var(--color-coral) / 0.08), rgb(var(--color-navy) / 0.08))',
+              borderColor: 'rgb(var(--border-primary))',
+            }}
+          >
+            <div>
+              <h3 className="text-xl font-bold" style={{ color: 'rgb(var(--fg-primary))' }}>Built for Fast Decisions</h3>
+              <p className="mt-1" style={{ color: 'rgb(var(--fg-secondary))' }}>Generate, compare, and iterate room concepts without leaving the workflow.</p>
+            </div>
+            <Link to="/ai-generate" className="no-underline self-start md:self-auto">
+              <motion.span
+                whileHover={{ x: 4 }}
+                className="inline-flex items-center font-semibold"
+                style={{ color: 'rgb(var(--color-coral))' }}
+              >
+                Explore AI Studio <ChevronRight className="w-4 h-4 ml-1" />
+              </motion.span>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
       {/* ─────────────────── Gallery Section ─────────────────── */}
-      <section className="py-20" style={{ background: 'rgb(var(--color-card))' }}>
+      <section className="section-spacing" style={{ background: 'rgb(var(--bg-primary))' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-16 md:mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--fg-primary))' }}>
               Inspiration Gallery
             </h2>
-            <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
+            <p className="text-lg md:text-xl max-w-3xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
               See what's possible with Homelytics
             </p>
           </motion.div>
@@ -591,19 +626,19 @@ export default function Home() {
       </section>
 
       {/* ─────────────────── Testimonials ─────────────────── */}
-      <section className="py-20" style={{ background: 'rgb(var(--bg-secondary))' }}>
+      <section className="section-spacing" style={{ background: 'rgb(var(--bg-secondary))' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-16 md:mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--fg-primary))' }}>
               What Our Users Say
             </h2>
-            <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
+            <p className="text-lg md:text-xl max-w-3xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
               Join thousands of happy users transforming their spaces
             </p>
           </motion.div>
@@ -653,19 +688,19 @@ export default function Home() {
       <section className="relative py-32 overflow-hidden">
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(135deg, rgb(var(--color-navy)) 0%, rgb(40 20 50) 50%, rgb(var(--color-coral)) 100%)' }}
+          style={{ background: 'linear-gradient(135deg, rgb(9 9 11) 0%, rgb(18 18 26) 50%, rgb(24 24 33) 100%)' }}
         >
           <motion.div
             animate={{ scale: [1, 1.3, 1], rotate: [0, 90, 0] }}
             transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
             className="absolute -top-20 -left-20 w-96 h-96 rounded-full blur-3xl"
-            style={{ background: 'rgba(233,69,96,0.20)' }}
+            style={{ background: 'rgb(var(--color-coral) / 0.15)' }}
           />
           <motion.div
             animate={{ scale: [1.3, 1, 1.3], rotate: [0, -90, 0] }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
             className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full blur-3xl"
-            style={{ background: 'rgba(248,247,244,0.06)' }}
+            style={{ background: 'rgb(var(--color-coral) / 0.08)' }}
           />
         </div>
 
@@ -677,26 +712,26 @@ export default function Home() {
             transition={{ duration: 0.8 }}
           >
             <motion.h2
-              className="text-4xl md:text-6xl font-extrabold mb-6 text-white"
+              className="text-4xl md:text-6xl font-bold mb-6 text-white"
               animate={{ scale: [1, 1.02, 1] }}
               transition={{ duration: 3, repeat: Infinity }}
             >
               Ready to Transform Your Space?
             </motion.h2>
-            <p className="text-xl md:text-2xl mb-10 text-white/90 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
               Start designing your dream room today with AI or customize it yourself
             </p>
             <Link to="/ai-generate">
-              <motion.div
-                whileHover={{ scale: 1.08, boxShadow: '0 30px 60px rgba(0,0,0,0.35)' }}
+              <motion.button
+                whileHover={{ scale: 1.08, y: -4 }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-10 py-5 rounded-2xl font-bold text-xl shadow-2xl group cursor-pointer"
-                style={{ background: '#fff', color: 'rgb(var(--color-navy))' }}
+                className="inline-flex items-center px-10 py-5 rounded-2xl font-bold text-lg shadow-lg hover:shadow-2xl group cursor-pointer"
+                style={{ background: 'rgb(var(--color-coral))', color: 'rgb(18, 18, 26)' }}
               >
-                <Sparkles className="w-7 h-7 mr-3 group-hover:rotate-12 group-hover:scale-110 transition-all" style={{ color: 'rgb(var(--color-coral))' }} />
+                <Sparkles className="w-7 h-7 mr-3 group-hover:rotate-12 group-hover:scale-110 transition-all" />
                 Get Started Free
                 <ChevronRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
-              </motion.div>
+              </motion.button>
             </Link>
           </motion.div>
         </div>

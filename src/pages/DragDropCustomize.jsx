@@ -254,7 +254,9 @@ export default function DragDropCustomize() {
     <div className="min-h-screen py-12" style={{ background: 'rgb(var(--bg-primary))' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>Drag &amp; Drop Customization</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            <span className="gradient-text">Drag &amp; Drop Customization</span>
+          </h1>
           <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>Customize your room with real products from the database</p>
         </motion.div>
 
