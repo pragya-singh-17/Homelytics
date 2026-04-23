@@ -241,46 +241,46 @@ export default function DragDropCustomize() {
   // --- LOADING SCREEN ---
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'rgb(var(--bg-primary))' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-xl font-medium text-gray-600">Loading Furniture Library...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 mx-auto mb-4" style={{ borderColor: 'rgb(var(--color-coral))' }}></div>
+          <p className="text-xl font-medium" style={{ color: 'rgb(var(--fg-secondary))' }}>Loading Furniture Library...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen py-12" style={{ background: 'rgb(var(--bg-primary))' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Drag & Drop Customization</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">Customize your room with real products from the database</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>Drag &amp; Drop Customization</h1>
+          <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>Customize your room with real products from the database</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <div className="lg:col-span-1 bg-white rounded-xl shadow-lg p-4 h-fit">
-            <h2 className="text-xl font-semibold mb-4">Furniture Library</h2>
-            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="w-full px-3 py-2 border rounded-lg mb-4">
+          <div className="lg:col-span-1 rounded-xl p-4 h-fit" style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}>
+            <h2 className="text-xl font-semibold mb-4" style={{ color: 'rgb(var(--fg-primary))' }}>Furniture Library</h2>
+            <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="input-base mb-4">
               {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
             </select>
             <div className="space-y-3 max-h-[600px] overflow-y-auto">
               {filteredFurniture.map(furniture => (
-                <div key={furniture.dbId} draggable onDragStart={(e) => handleFurnitureDragStart(e, furniture)} className="bg-gray-50 rounded-lg p-3 cursor-move hover:bg-gray-100">
+                <div key={furniture.dbId} draggable onDragStart={(e) => handleFurnitureDragStart(e, furniture)} className="rounded-lg p-3 cursor-move transition-colors" style={{ background: 'rgb(var(--bg-secondary))' }} onMouseEnter={e => e.currentTarget.style.background = 'rgb(var(--bg-tertiary))'} onMouseLeave={e => e.currentTarget.style.background = 'rgb(var(--bg-secondary))'}>
                   <img src={furniture.image} alt={furniture.name} className="w-full h-24 object-contain rounded-md mb-2" />
-                  <p className="font-medium text-sm">{furniture.name}</p>
-                  <p className="text-blue-600 font-semibold text-sm">₹{furniture.price.toLocaleString('en-IN')}</p>
+                  <p className="font-medium text-sm" style={{ color: 'rgb(var(--fg-primary))' }}>{furniture.name}</p>
+                  <p className="font-semibold text-sm" style={{ color: 'rgb(var(--color-coral))' }}>₹{furniture.price.toLocaleString('en-IN')}</p>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="lg:col-span-3 space-y-4">
-            <div className="bg-white rounded-xl shadow-lg p-4 flex flex-wrap gap-3 items-center justify-between">
+            <div className="rounded-xl p-4 flex flex-wrap gap-3 items-center justify-between" style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}>
               <div className="flex gap-2 items-center">
-                <button onClick={() => setScale(Math.max(0.5, scale - 0.1))} className="p-2 bg-gray-100 rounded-lg"><ZoomOut className="w-5 h-5" /></button>
-                <button onClick={() => setScale(Math.min(2, scale + 0.1))} className="p-2 bg-gray-100 rounded-lg"><ZoomIn className="w-5 h-5" /></button>
-                <span className="px-3 py-2 bg-gray-100 rounded-lg text-sm font-medium">{Math.round(scale * 100)}%</span>
+                <button onClick={() => setScale(Math.max(0.5, scale - 0.1))} className="p-2 rounded-lg transition-colors" style={{ background: 'rgb(var(--bg-secondary))' }}><ZoomOut className="w-5 h-5" /></button>
+                <button onClick={() => setScale(Math.min(2, scale + 0.1))} className="p-2 rounded-lg transition-colors" style={{ background: 'rgb(var(--bg-secondary))' }}><ZoomIn className="w-5 h-5" /></button>
+                <span className="px-3 py-2 rounded-lg text-sm font-medium" style={{ background: 'rgb(var(--bg-secondary))', color: 'rgb(var(--fg-primary))' }}>{Math.round(scale * 100)}%</span>
               </div>
               {selectedItem && (
                  <div className="flex items-center gap-2">
@@ -290,37 +290,38 @@ export default function DragDropCustomize() {
                         const it = furnitureItems.find(i => i.uniqueId === selectedItem)
                         if (it) setItemSize(selectedItem, parseInt(e.target.value), Math.round(parseInt(e.target.value) / (it.width / it.height)))
                       }}
+                      style={{ accentColor: 'rgb(var(--color-coral))' }}
                     />
                  </div>
               )}
               <div className="flex gap-2">
-                <button onClick={handleSaveImage} disabled={!backgroundImage} className="px-4 py-2 bg-green-600 text-white rounded-lg flex items-center gap-2"><Download className="w-5 h-5" />Save</button>
-                <button onClick={() => setShowPricing(!showPricing)} className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2"><IndianRupee className="w-5 h-5" />Pricing</button>
+                <button onClick={handleSaveImage} disabled={!backgroundImage} className="px-4 py-2 rounded-lg flex items-center gap-2 text-white transition-colors" style={{ background: 'rgb(var(--color-coral))' }}><Download className="w-5 h-5" />Save</button>
+                <button onClick={() => setShowPricing(!showPricing)} className="px-4 py-2 rounded-lg flex items-center gap-2 text-white transition-colors" style={{ background: 'rgb(var(--color-navy))' }}><IndianRupee className="w-5 h-5" />Pricing</button>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="rounded-xl p-6" style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}>
               {!backgroundImage ? (
-                <div {...getRootProps()} className={`border-2 border-dashed rounded-lg p-12 text-center cursor-pointer min-h-[500px] flex items-center justify-center ${isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}`}>
+                <div {...getRootProps()} className="border-2 border-dashed rounded-lg p-12 text-center cursor-pointer min-h-[500px] flex items-center justify-center transition-colors" style={{ borderColor: isDragActive ? 'rgb(var(--color-coral))' : 'rgb(var(--border-secondary))', background: isDragActive ? 'rgba(233,69,96,0.05)' : 'transparent' }}>
                   <input {...getInputProps()} />
-                  <div><Upload className="w-20 h-20 mx-auto text-gray-400" /><p className="text-xl mt-4">Upload your room image</p></div>
+                  <div><Upload className="w-20 h-20 mx-auto mb-4" style={{ color: 'rgb(var(--fg-tertiary))' }} /><p className="text-xl" style={{ color: 'rgb(var(--fg-secondary))' }}>Upload your room image</p></div>
                 </div>
               ) : (
                 <div ref={canvasRef} onDragOver={(e) => e.preventDefault()} onDrop={handleCanvasDrop} onMouseDown={(e) => e.target === e.currentTarget && setSelectedItem(null)} className="relative overflow-hidden rounded-lg" style={{ transform: `scale(${scale})`, transformOrigin: 'top left', minHeight: '500px' }}>
                   <img src={backgroundImage} alt="Room" className="w-full h-auto pointer-events-none" draggable={false} />
                   {furnitureItems.map(item => (
-                    <div key={item.uniqueId} draggable onDrag={(e) => handleItemDrag(e, item.uniqueId)} onClick={() => setSelectedItem(item.uniqueId)} onDoubleClick={() => openFlipkart(item.links)} className={`absolute cursor-move ${selectedItem === item.uniqueId ? 'ring-4 ring-blue-500' : ''}`} style={{ left: item.x, top: item.y, width: item.width, height: item.height, transform: `rotate(${item.rotation}deg)` }}>
+                    <div key={item.uniqueId} draggable onDrag={(e) => handleItemDrag(e, item.uniqueId)} onClick={() => setSelectedItem(item.uniqueId)} onDoubleClick={() => openFlipkart(item.links)} className="absolute cursor-move" style={{ left: item.x, top: item.y, width: item.width, height: item.height, transform: `rotate(${item.rotation}deg)`, outline: selectedItem === item.uniqueId ? '3px solid rgb(var(--color-coral))' : 'none', outlineOffset: '2px' }}>
                       <img src={item.image} alt={item.name} className="w-full h-full object-contain rounded-lg shadow-lg" draggable={false} />
                       {selectedItem === item.uniqueId && (
                         <>
                           <div className="absolute -top-10 left-0 right-0 flex gap-1 justify-center">
-                            <button onClick={(e) => { e.stopPropagation(); handleRotateItem(item.uniqueId, 'ccw') }} className="p-1 bg-blue-600 text-white rounded"><RotateCcw className="w-4 h-4" /></button>
-                            <button onClick={(e) => { e.stopPropagation(); handleRotateItem(item.uniqueId, 'cw') }} className="p-1 bg-blue-600 text-white rounded"><RotateCw className="w-4 h-4" /></button>
-                            <button onClick={(e) => { e.stopPropagation(); openFlipkart(item.links) }} className="px-2 py-1 bg-amber-500 text-white rounded text-xs">View</button>
+                            <button onClick={(e) => { e.stopPropagation(); handleRotateItem(item.uniqueId, 'ccw') }} className="p-1 text-white rounded" style={{ background: 'rgb(var(--color-navy))' }}><RotateCcw className="w-4 h-4" /></button>
+                            <button onClick={(e) => { e.stopPropagation(); handleRotateItem(item.uniqueId, 'cw') }} className="p-1 text-white rounded" style={{ background: 'rgb(var(--color-navy))' }}><RotateCw className="w-4 h-4" /></button>
+                            <button onClick={(e) => { e.stopPropagation(); openFlipkart(item.links) }} className="px-2 py-1 text-white rounded text-xs" style={{ background: 'rgb(var(--color-coral))' }}>View</button>
                             <button onClick={(e) => { e.stopPropagation(); handleDeleteItem(item.uniqueId) }} className="p-1 bg-red-600 text-white rounded"><Trash2 className="w-4 h-4" /></button>
                           </div>
                           {['nw','ne','sw','se'].map(c => (
-                            <div key={c} onMouseDown={(e) => beginResize(e, item, c)} className={`absolute w-3 h-3 bg-white border border-blue-600 ${c === 'nw' ? '-top-1 -left-1 cursor-nwse-resize' : c === 'ne' ? '-top-1 -right-1 cursor-nesw-resize' : c === 'sw' ? '-bottom-1 -left-1 cursor-nesw-resize' : '-bottom-1 -right-1 cursor-nwse-resize'}`} />
+                            <div key={c} onMouseDown={(e) => beginResize(e, item, c)} className={`absolute w-3 h-3 bg-white border ${c === 'nw' ? '-top-1 -left-1 cursor-nwse-resize' : c === 'ne' ? '-top-1 -right-1 cursor-nesw-resize' : c === 'sw' ? '-bottom-1 -left-1 cursor-nesw-resize' : '-bottom-1 -right-1 cursor-nwse-resize'}`} style={{ borderColor: 'rgb(var(--color-coral))' }} />
                           ))}
                         </>
                       )}
@@ -331,15 +332,15 @@ export default function DragDropCustomize() {
             </div>
 
             {showPricing && (
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-2xl font-semibold mb-4">Pricing</h3>
+              <div className="rounded-xl p-6" style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}>
+                <h3 className="text-2xl font-semibold mb-4" style={{ color: 'rgb(var(--fg-primary))' }}>Pricing</h3>
                 {furnitureItems.map((item, i) => (
-                  <div key={item.uniqueId} className="flex justify-between border-b py-2">
+                  <div key={item.uniqueId} className="flex justify-between py-2" style={{ borderBottom: '1px solid rgb(var(--border-primary))', color: 'rgb(var(--fg-primary))' }}>
                     <span>{i + 1}. {item.name}</span>
                     <span className="font-bold">₹{item.price.toLocaleString('en-IN')}</span>
                   </div>
                 ))}
-                <div className="flex justify-between text-xl font-bold mt-4"><span>Total</span><span className="text-blue-600">₹{calculateTotalPrice().toLocaleString('en-IN')}</span></div>
+                <div className="flex justify-between text-xl font-bold mt-4" style={{ color: 'rgb(var(--fg-primary))' }}><span>Total</span><span style={{ color: 'rgb(var(--color-coral))' }}>₹{calculateTotalPrice().toLocaleString('en-IN')}</span></div>
               </div>
             )}
           </div>

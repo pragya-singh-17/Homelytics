@@ -1,0 +1,138 @@
+/* ─────────────────────────────────────────────────────────────────
+   Homelytics Design System Tokens
+   Spec: Deep Navy #1A1A2E / Coral-Red #E94560 / Warm Off-White #F8F7F4
+   ───────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ─ Brand Palette ─ */
+  --color-navy:        26 26 46;       /* #1A1A2E */
+  --color-navy-light:  32 33 60;       /* #20213C */
+  --color-coral:       233 69 96;      /* #E94560 */
+  --color-coral-hover: 210 52 78;
+  --color-surface:     248 247 244;    /* #F8F7F4 */
+  --color-card:        255 255 255;    /* #FFFFFF */
+  --color-card-border: 235 235 235;   /* #EBEBEB */
+
+  /* ─ Semantic Colors ─ */
+  --primary:       233 69 96;
+  --primary-dark:  210 52 78;
+  --primary-light: 245 140 157;
+
+  --secondary:       107 114 128;
+  --secondary-dark:  55 65 81;
+  --secondary-light: 243 244 246;
+
+  --accent:       233 69 96;
+  --accent-hover: 210 52 78;
+
+  --success: 34 197 94;
+  --warning: 251 146 60;
+  --error:   239 68 68;
+  --info:    59 130 246;
+
+  /* ─ Backgrounds ─ */
+  --bg-primary:   248 247 244;   /* warm off-white */
+  --bg-secondary: 243 242 238;
+  --bg-tertiary:  235 234 230;
+
+  /* ─ Foregrounds ─ */
+  --fg-primary:   26 26 46;      /* deep navy */
+  --fg-secondary: 75 75 99;
+  --fg-tertiary:  120 120 140;
+
+  /* ─ Borders ─ */
+  --border-primary:   235 235 235;
+  --border-secondary: 209 213 219;
+
+  /* ─ Typography ─ */
+  --font-family:  'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Inter', 'Segoe UI', sans-serif;
+  --font-mono:    'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+
+  /* ─ Spacing (4px base) ─ */
+  --space-0:    0;
+  --space-0-5:  0.125rem;   /* 2px  */
+  --space-1:    0.25rem;    /* 4px  */
+  --space-1-5:  0.375rem;   /* 6px  */
+  --space-2:    0.5rem;     /* 8px  */
+  --space-3:    0.75rem;    /* 12px */
+  --space-4:    1rem;       /* 16px */
+  --space-5:    1.25rem;    /* 20px */
+  --space-6:    1.5rem;     /* 24px */
+  --space-8:    2rem;       /* 32px */
+  --space-10:   2.5rem;     /* 40px */
+  --space-12:   3rem;       /* 48px */
+  --space-16:   4rem;       /* 64px */
+
+  /* ─ Border Radius ─ */
+  --radius-none: 0;
+  --radius-sm:   0.25rem;   /* 4px  */
+  --radius-md:   0.5rem;    /* 8px  - inputs */
+  --radius-lg:   0.75rem;   /* 12px - cards  */
+  --radius-xl:   1rem;
+  --radius-2xl:  1.25rem;   /* 20px - pills  */
+  --radius-3xl:  1.5rem;
+  --radius-full: 9999px;
+
+  /* ─ Shadows ─ */
+  --shadow-xs:    0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-sm:    0 2px 4px 0 rgba(0, 0, 0, 0.04);
+  --shadow-base:  0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-md:    0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg:    0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-xl:    0 16px 40px rgba(0, 0, 0, 0.10);
+  --shadow-2xl:   0 24px 56px rgba(0, 0, 0, 0.14);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04);
+
+  /* ─ Z-Index Scale ─ */
+  --z-hide:             -1;
+  --z-base:              0;
+  --z-dropdown:        100;
+  --z-sticky:          200;
+  --z-fixed:           300;
+  --z-modal-backdrop:  400;
+  --z-modal:           500;
+  --z-popover:         600;
+  --z-tooltip:         700;
+  --z-notification:    800;
+
+  /* ─ Transitions ─ */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─────────────── Dark Mode ─────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg-primary:   248 247 244;
+    --fg-secondary: 209 213 219;
+    --fg-tertiary:  156 163 175;
+
+    --bg-primary:   20 20 36;
+    --bg-secondary: 26 26 46;
+    --bg-tertiary:  38 38 62;
+
+    --border-primary:   55 55 75;
+    --border-secondary: 75 75 99;
+
+    --color-card:        26 26 46;
+    --color-card-border: 55 55 75;
+  }
+}
+
+.dark {
+  --fg-primary:   248 247 244;
+  --fg-secondary: 209 213 219;
+  --fg-tertiary:  156 163 175;
+
+  --bg-primary:   20 20 36;
+  --bg-secondary: 26 26 46;
+  --bg-tertiary:  38 38 62;
+
+  --border-primary:   55 55 75;
+  --border-secondary: 75 75 99;
+
+  --color-card:        26 26 46;
+  --color-card-border: 55 55 75;
+}
