@@ -49,11 +49,11 @@ const BeforeAfterComparison = ({ beforeImage, afterImage, beforeLabel = "Before"
   return (
     <div
       ref={containerRef}
-      className="relative w-full overflow-hidden rounded-2xl bg-gray-200 shadow-2xl select-none"
+      className="relative w-full overflow-hidden rounded-2xl shadow-2xl select-none"
       onMouseMove={handleMouseMove}
       onTouchMove={handleTouchMove}
       onMouseUp={() => {}}
-      style={{ cursor: 'col-resize' }}
+      style={{ cursor: 'col-resize', background: 'rgb(var(--bg-tertiary))' }}
     >
       {/* Container for images */}
       <div className="relative w-full" style={{ paddingBottom: '100%' }}>
@@ -79,23 +79,24 @@ const BeforeAfterComparison = ({ beforeImage, afterImage, beforeLabel = "Before"
 
         {/* Slider line */}
         <div
-          className="absolute top-0 bottom-0 w-1 bg-blue-500 shadow-lg"
-          style={{ left: `${sliderPos}%`, transform: 'translateX(-50%)' }}
+          className="absolute top-0 bottom-0 w-1 shadow-lg"
+          style={{ left: `${sliderPos}%`, transform: 'translateX(-50%)', background: 'rgb(var(--color-coral))' }}
         >
           {/* Slider handle */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-blue-500">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center border-2"
+            style={{ borderColor: 'rgb(var(--color-coral))' }}>
             <div className="flex gap-1">
-              <div className="w-1 h-4 bg-blue-500 rounded-full" />
-              <div className="w-1 h-4 bg-blue-500 rounded-full" />
+              <div className="w-1 h-4 rounded-full" style={{ background: 'rgb(var(--color-coral))' }} />
+              <div className="w-1 h-4 rounded-full" style={{ background: 'rgb(var(--color-coral))' }} />
             </div>
           </div>
         </div>
 
         {/* Labels */}
-        <div className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded-lg text-sm font-medium">
+        <div className="absolute top-4 left-4 text-white px-3 py-1 rounded-lg text-sm font-medium" style={{ background: 'rgba(26,26,46,0.70)' }}>
           {beforeLabel}
         </div>
-        <div className="absolute top-4 right-4 bg-blue-600/80 text-white px-3 py-1 rounded-lg text-sm font-medium">
+        <div className="absolute top-4 right-4 text-white px-3 py-1 rounded-lg text-sm font-medium" style={{ background: 'rgba(233,69,96,0.80)' }}>
           {afterLabel}
         </div>
       </div>
@@ -349,7 +350,7 @@ export default function AIGeneration() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12">
+    <div className="min-h-screen py-12" style={{ background: 'rgb(var(--bg-primary))' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -362,7 +363,7 @@ export default function AIGeneration() {
             transition={{ duration: 3, repeat: Infinity }}
             className="inline-block mb-4"
           >
-            <Sparkles className="w-16 h-16 mx-auto text-blue-600" />
+            <Sparkles className="w-16 h-16 mx-auto" style={{ color: 'rgb(var(--color-coral))' }} />
           </motion.div>
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             <span className="gradient-text">AI Room Generation</span>
@@ -381,20 +382,21 @@ export default function AIGeneration() {
             className="space-y-6"
           >
             {/* Image Upload */}
-            <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
-                <Upload className="w-6 h-6 mr-2 text-blue-600" />
+            <div className="rounded-3xl p-6 transition-all duration-300" style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}>
+              <h2 className="text-2xl font-semibold mb-4 flex items-center" style={{ color: 'rgb(var(--fg-primary))' }}>
+                <Upload className="w-6 h-6 mr-2" style={{ color: 'rgb(var(--color-coral))' }} />
                 Upload Room Image
               </h2>
               
               <motion.div
                 whileHover={{ scale: 1.01 }}
                 {...getRootProps()}
-                className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 ${
-                  isDragActive
-                    ? 'border-blue-500 bg-blue-50 scale-105'
-                    : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50/50'
-                }`}
+                className="border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300"
+                style={{
+                  borderColor: isDragActive ? 'rgb(var(--color-coral))' : 'rgb(var(--border-secondary))',
+                  background: isDragActive ? 'rgba(233,69,96,0.05)' : 'transparent',
+                  transform: isDragActive ? 'scale(1.02)' : 'scale(1)',
+                }}
               >
                 <input {...getInputProps()} />
                 {imagePreview ? (
@@ -432,8 +434,8 @@ export default function AIGeneration() {
             </div>
 
             {/* Room Type Selection */}
-            <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <div className="rounded-3xl p-6 transition-all duration-300" style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}>
+              <h2 className="text-2xl font-semibold mb-4" style={{ color: 'rgb(var(--fg-primary))' }}>
                 🏠 Room Type
               </h2>
               <div className="grid grid-cols-2 gap-3">
@@ -446,11 +448,14 @@ export default function AIGeneration() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setRoomType(type.toLowerCase().replace(' ', '-'))}
-                    className={`px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
-                      roomType === type.toLowerCase().replace(' ', '-')
-                        ? 'bg-blue-600 text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                    className="px-4 py-3 rounded-xl font-medium transition-all duration-200"
+                    style={{
+                      background: roomType === type.toLowerCase().replace(' ', '-')
+                        ? 'rgb(var(--color-coral))' : 'rgb(var(--bg-secondary))',
+                      color: roomType === type.toLowerCase().replace(' ', '-')
+                        ? '#fff' : 'rgb(var(--fg-primary))',
+                      boxShadow: roomType === type.toLowerCase().replace(' ', '-') ? 'var(--shadow-md)' : 'none',
+                    }}
                   >
                     {type}
                   </motion.button>
@@ -459,8 +464,8 @@ export default function AIGeneration() {
             </div>
 
             {/* Style Selection */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            <div className="rounded-xl p-6" style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}>
+              <h2 className="text-2xl font-semibold mb-4" style={{ color: 'rgb(var(--fg-primary))' }}>
                 🎨 Design Style
               </h2>
               <div className="grid grid-cols-2 gap-3">
@@ -473,11 +478,14 @@ export default function AIGeneration() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setStyle(s.toLowerCase())}
-                    className={`px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
-                      style === s.toLowerCase()
-                        ? 'bg-blue-600 text-white shadow-lg'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                    className="px-4 py-3 rounded-xl font-medium transition-all duration-200"
+                    style={{
+                      background: style === s.toLowerCase()
+                        ? 'rgb(var(--color-coral))' : 'rgb(var(--bg-secondary))',
+                      color: style === s.toLowerCase()
+                        ? '#fff' : 'rgb(var(--fg-primary))',
+                      boxShadow: style === s.toLowerCase() ? 'var(--shadow-md)' : 'none',
+                    }}
                   >
                     {s}
                   </motion.button>
@@ -486,9 +494,9 @@ export default function AIGeneration() {
             </div>
 
             {/* Budget Section */}
-            <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
-                <IndianRupee className="w-6 h-6 mr-2 text-green-600" />
+            <div className="rounded-3xl p-6 transition-all duration-300" style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}>
+              <h2 className="text-2xl font-semibold mb-4 flex items-center" style={{ color: 'rgb(var(--fg-primary))' }}>
+                <IndianRupee className="w-6 h-6 mr-2" style={{ color: 'rgb(var(--color-coral))' }} />
                 Budget & Room Dimensions
               </h2>
               
@@ -504,7 +512,8 @@ export default function AIGeneration() {
                   step="10000"
                   value={budget}
                   onChange={(e) => setBudget(parseInt(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+                  style={{ accentColor: 'rgb(var(--color-coral))' }}
                 />
                 <div className="flex justify-between text-xs text-gray-500 mt-1">
                   <span>₹10K</span>
@@ -547,7 +556,8 @@ export default function AIGeneration() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={fetchBudgetSuggestions}
-                className="w-full bg-green-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-green-700 transition-all duration-200 flex items-center justify-center shadow-lg"
+                className="w-full py-3 px-6 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center text-white"
+                style={{ background: 'rgb(var(--color-coral))', boxShadow: 'var(--shadow-md)' }}
               >
                 <Sparkles className="w-5 h-5 mr-2" />
                 Get Budget Suggestions
@@ -558,11 +568,12 @@ export default function AIGeneration() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-green-50 border border-green-200 rounded-xl"
+                  className="mt-4 p-4 rounded-xl"
+                  style={{ background: 'rgba(233,69,96,0.06)', border: '1px solid rgba(233,69,96,0.20)' }}
                 >
                   <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-semibold text-green-900">Suggested Items ({budgetSuggestions.item_count})</h3>
-                    <span className="text-sm font-medium text-green-700">
+                    <h3 className="font-semibold" style={{ color: 'rgb(var(--color-navy))' }}>Suggested Items ({budgetSuggestions.item_count})</h3>
+                    <span className="text-sm font-medium" style={{ color: 'rgb(var(--color-coral))' }}>
                       {budgetSuggestions.budget_utilization}% utilized
                     </span>
                   </div>
@@ -622,9 +633,9 @@ export default function AIGeneration() {
             </div>
 
             {/* Prompt Input */}
-            <div className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300">
+            <div className="rounded-3xl p-6 transition-all duration-300" style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-semibold text-gray-900">
+                <h2 className="text-2xl font-semibold" style={{ color: 'rgb(var(--fg-primary))' }}>
                   ✍️ Furniture Items
                 </h2>
               </div>
@@ -634,7 +645,8 @@ export default function AIGeneration() {
                   setPrompt(e.target.value)
                 }}
                 placeholder="Click 'Get Budget Suggestions' above, or manually type: sofa, coffee table, lamp, rug..."
-                className="w-full h-32 px-4 py-3 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200 hover:border-blue-300"
+                className="input-base h-32 rounded-2xl resize-none"
+                style={{ borderWidth: '2px' }}
               />
             </div>
 
@@ -642,13 +654,15 @@ export default function AIGeneration() {
             <motion.button
               onClick={handleGenerate}
               disabled={!image || isGenerating}
-              whileHover={!image || isGenerating ? {} : { scale: 1.02, boxShadow: "0 20px 40px rgba(0,0,0,0.2)" }}
+              whileHover={!image || isGenerating ? {} : { scale: 1.02, boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}
               whileTap={!image || isGenerating ? {} : { scale: 0.98 }}
-              className={`w-full py-5 rounded-2xl font-bold text-xl flex items-center justify-center space-x-2 transition-all duration-300 ${
-                !image || isGenerating
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700 shadow-xl'
-              }`}
+              className="w-full py-5 rounded-2xl font-bold text-xl flex items-center justify-center gap-2 transition-all duration-300"
+              style={{
+                background: !image || isGenerating ? 'rgb(var(--bg-tertiary))' : 'rgb(var(--color-coral))',
+                color: !image || isGenerating ? 'rgb(var(--fg-tertiary))' : '#fff',
+                cursor: !image || isGenerating ? 'not-allowed' : 'pointer',
+                boxShadow: !image || isGenerating ? 'none' : 'var(--shadow-xl)',
+              }}
             >
               {isGenerating ? (
                 <>
@@ -669,20 +683,21 @@ export default function AIGeneration() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="bg-white rounded-3xl shadow-lg p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300"
+            className="rounded-3xl p-6 transition-all duration-300"
+            style={{ background: 'rgb(var(--color-card))', border: '1px solid rgb(var(--color-card-border))', boxShadow: 'var(--shadow-base)' }}
           >
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
-              <Sparkles className="w-6 h-6 mr-2 text-blue-600" />
+            <h2 className="text-2xl font-semibold mb-4 flex items-center" style={{ color: 'rgb(var(--fg-primary))' }}>
+              <Sparkles className="w-6 h-6 mr-2" style={{ color: 'rgb(var(--color-coral))' }} />
               Generated Design
             </h2>
 
             {isGenerating ? (
-              <div className="h-96 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl relative overflow-hidden">
+              <div className="h-96 flex flex-col items-center justify-center rounded-2xl relative overflow-hidden" style={{ background: 'linear-gradient(135deg, rgba(233,69,96,0.06), rgba(26,26,46,0.06))' }}>
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                 >
-                  <Loader2 className="w-20 h-20 text-blue-600 mb-6" />
+                  <Loader2 className="w-20 h-20 mb-6" style={{ color: 'rgb(var(--color-coral))' }} />
                 </motion.div>
                 <motion.p
                   animate={{ opacity: [0.5, 1, 0.5] }}
@@ -754,7 +769,8 @@ export default function AIGeneration() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleDownload}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-medium hover:from-green-700 hover:to-emerald-700 transition-all flex items-center justify-center space-x-2 shadow-lg"
+                    className="flex-1 px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 text-white"
+                    style={{ background: 'rgb(var(--color-coral))', boxShadow: 'var(--shadow-md)' }}
                   >
                     <Download className="w-5 h-5" />
                     <span>Download</span>
@@ -763,7 +779,8 @@ export default function AIGeneration() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleShare}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-medium hover:from-blue-700 hover:to-cyan-700 transition-all flex items-center justify-center space-x-2 shadow-lg"
+                    className="flex-1 px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 text-white"
+                    style={{ background: 'rgb(var(--color-navy))', boxShadow: 'var(--shadow-md)' }}
                   >
                     <Share2 className="w-5 h-5" />
                     <span>Share</span>
@@ -772,7 +789,12 @@ export default function AIGeneration() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setShowPricing(!showPricing)}
-                    className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-all flex items-center justify-center space-x-2 shadow-lg"
+                    className="flex-1 px-4 py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+                    style={{
+                      background: showPricing ? 'rgb(var(--color-navy))' : 'rgb(var(--bg-secondary))',
+                      color: showPricing ? '#fff' : 'rgb(var(--fg-primary))',
+                      border: '1px solid rgb(var(--color-card-border))',
+                    }}
                   >
                     <IndianRupee className="w-5 h-5" />
                     <span>Pricing</span>
@@ -784,10 +806,11 @@ export default function AIGeneration() {
                   <motion.div
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    className="glass-effect rounded-2xl p-6 border border-white/30"
+                    className="rounded-2xl p-6"
+                    style={{ background: 'rgb(var(--bg-secondary))', border: '1px solid rgb(var(--color-card-border))' }}
                   >
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                      <IndianRupee className="w-5 h-5 mr-2 text-purple-600" />
+                    <h3 className="text-lg font-semibold mb-4 flex items-center" style={{ color: 'rgb(var(--fg-primary))' }}>
+                      <IndianRupee className="w-5 h-5 mr-2" style={{ color: 'rgb(var(--color-coral))' }} />
                       Estimated Pricing
                     </h3>
                     <div className="space-y-3">

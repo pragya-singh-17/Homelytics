@@ -36,39 +36,34 @@ export default function Home() {
       icon: Sparkles,
       title: "AI-Powered Generation",
       description: "Upload your empty room and let AI transform it into a fully furnished space with just a prompt.",
-      gradient: "from-blue-500 to-blue-600"
     },
     {
       icon: PaintBucket,
       title: "Drag & Drop Customization",
       description: "Manually design your room by dragging and dropping furniture items to create your perfect layout.",
-      gradient: "from-blue-500 to-cyan-500"
     },
     {
       icon: Building2,
       title: "2D Layout Generator",
       description: "Generate four blueprint-style floor plan options from total area and room count in one click.",
-      gradient: "from-cyan-500 to-sky-500"
     },
     {
       icon: IndianRupee,
       title: "Price Estimation",
       description: "Get instant pricing for all furniture items in your designed room to plan your budget effectively.",
-      gradient: "from-green-500 to-emerald-500"
     },
     {
       icon: Share2,
       title: "Save & Share",
       description: "Download your designs and share them with friends, family, or on social media.",
-      gradient: "from-orange-500 to-red-500"
     }
   ]
 
   const stats = [
-    { icon: Heart, value: "50K+", label: "Happy Users" },
-    { icon: Sparkles, value: "200K+", label: "Rooms Designed" },
-    { icon: TrendingUp, value: "98%", label: "Satisfaction Rate" },
-    { icon: Zap, value: "< 60s", label: "Avg. Generation Time" }
+    { icon: Heart,       value: "50K+",  label: "Happy Users"         },
+    { icon: Sparkles,    value: "200K+", label: "Rooms Designed"      },
+    { icon: TrendingUp,  value: "98%",   label: "Satisfaction Rate"   },
+    { icon: Zap,         value: "< 60s", label: "Avg. Generation Time"},
   ]
 
   const galleryImages = [
@@ -77,34 +72,35 @@ export default function Home() {
     "https://images.unsplash.com/photo-1616137466211-f939a420be84?w=800",
     "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800",
     "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?w=800",
-    "https://images.unsplash.com/photo-1615873968403-89e068629265?w=800"
+    "https://images.unsplash.com/photo-1615873968403-89e068629265?w=800",
   ]
 
   return (
     <div className="min-h-screen overflow-hidden">
-      {/* Hero Section with Parallax */}
+
+      {/* ─────────────────── Hero Section ─────────────────── */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Animated Background */}
-        <motion.div 
+        {/* Animated gradient background — Navy → Coral */}
+        <motion.div
           style={{ y }}
-          className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-600"
+          className="absolute inset-0"
+          style={{
+            y,
+            background: 'linear-gradient(135deg, rgb(var(--color-navy)) 0%, rgb(32 20 50) 50%, rgb(var(--color-coral)) 100%)',
+          }}
         >
-          {/* Animated Circles */}
+          {/* Animated blobs */}
           <motion.div
-            animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 180, 360],
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute top-20 left-20 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            className="absolute top-20 left-20 w-96 h-96 rounded-full blur-3xl"
+            style={{ background: 'rgba(233, 69, 96, 0.20)' }}
           />
           <motion.div
-            animate={{
-              scale: [1.2, 1, 1.2],
-              rotate: [360, 180, 0],
-            }}
-            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-20 right-20 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl"
+            animate={{ scale: [1.2, 1, 1.2], rotate: [360, 180, 0] }}
+            transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+            className="absolute bottom-20 right-20 w-96 h-96 rounded-full blur-3xl"
+            style={{ background: 'rgba(248, 247, 244, 0.08)' }}
           />
         </motion.div>
 
@@ -116,10 +112,17 @@ export default function Home() {
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, type: "spring" }}
+            transition={{ duration: 0.8, type: 'spring' }}
             className="mb-6"
           >
-            <span className="inline-block px-6 py-2 glass-effect rounded-full text-white font-semibold text-sm mb-6 border border-white/30">
+            <span
+              className="inline-block px-6 py-2 rounded-full text-white font-semibold text-sm mb-6"
+              style={{
+                background: 'rgba(255,255,255,0.12)',
+                border: '1px solid rgba(255,255,255,0.25)',
+                backdropFilter: 'blur(12px)',
+              }}
+            >
               ✨ AI-Powered Interior Design Platform
             </span>
           </motion.div>
@@ -132,7 +135,10 @@ export default function Home() {
           >
             Transform Your Space
             <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-200 via-cyan-200 to-blue-300">
+            <span
+              className="bg-clip-text text-transparent"
+              style={{ backgroundImage: 'linear-gradient(90deg, #f8a4b4, #ffd6de)' }}
+            >
               with AI Magic
             </span>
           </motion.h1>
@@ -143,8 +149,8 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-xl md:text-2xl mb-10 text-white/90 max-w-3xl mx-auto leading-relaxed font-medium"
           >
-            Design your dream room in minutes. Upload an empty room photo, draft layout options from square footage,
-            or customize everything yourself with our intuitive drag-and-drop interface.
+            Design your dream room in minutes. Upload an empty room photo, draft layout options
+            from square footage, or customize everything yourself with our intuitive drag-and-drop interface.
           </motion.p>
 
           <motion.div
@@ -155,11 +161,12 @@ export default function Home() {
           >
             <Link to="/ai-generate">
               <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }}
+                whileHover={{ scale: 1.05, boxShadow: '0 20px 40px rgba(0,0,0,0.25)' }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-8 py-4 bg-white text-gray-900 rounded-2xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all group"
+                className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-lg shadow-2xl transition-all group cursor-pointer"
+                style={{ background: '#fff', color: 'rgb(var(--color-navy))' }}
               >
-                <Sparkles className="w-6 h-6 mr-2 text-blue-600 group-hover:rotate-12 transition-transform" />
+                <Sparkles className="w-6 h-6 mr-2 group-hover:rotate-12 transition-transform" style={{ color: 'rgb(var(--color-coral))' }} />
                 Start with AI
                 <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </motion.div>
@@ -169,7 +176,13 @@ export default function Home() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-8 py-4 glass-effect border-2 border-white/30 text-white rounded-2xl font-bold text-lg hover:bg-white/20 transition-all group"
+                className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-lg transition-all group cursor-pointer"
+                style={{
+                  background: 'rgba(255,255,255,0.10)',
+                  border: '2px solid rgba(255,255,255,0.30)',
+                  color: '#fff',
+                  backdropFilter: 'blur(8px)',
+                }}
               >
                 <PaintBucket className="w-6 h-6 mr-2 group-hover:rotate-12 transition-transform" />
                 Customize Manually
@@ -180,9 +193,14 @@ export default function Home() {
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-8 py-4 bg-slate-900/80 border-2 border-cyan-300/30 text-white rounded-2xl font-bold text-lg hover:bg-slate-900 transition-all group"
+                className="inline-flex items-center px-8 py-4 rounded-2xl font-bold text-lg transition-all group cursor-pointer"
+                style={{
+                  background: 'rgba(26,26,46,0.75)',
+                  border: '2px solid rgba(233,69,96,0.30)',
+                  color: '#fff',
+                }}
               >
-                <Building2 className="w-6 h-6 mr-2 text-cyan-300 group-hover:-rotate-6 transition-transform" />
+                <Building2 className="w-6 h-6 mr-2 group-hover:-rotate-6 transition-transform" style={{ color: '#fda4af' }} />
                 Generate Layout
               </motion.div>
             </Link>
@@ -193,15 +211,20 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
+            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
           >
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
-                whileHover={{ y: -5, scale: 1.05 }}
-                className="glass-effect rounded-2xl p-4 text-white"
+                whileHover={{ y: -5, scale: 1.04 }}
+                className="rounded-2xl p-4 text-white"
+                style={{
+                  background: 'rgba(255,255,255,0.10)',
+                  border: '1px solid rgba(255,255,255,0.18)',
+                  backdropFilter: 'blur(12px)',
+                }}
               >
-                <stat.icon className="w-8 h-8 mx-auto mb-2 text-yellow-300" />
+                <stat.icon className="w-8 h-8 mx-auto mb-2" style={{ color: '#fda4af' }} />
                 <div className="text-3xl font-bold mb-1">{stat.value}</div>
                 <div className="text-sm text-white/80">{stat.label}</div>
               </motion.div>
@@ -209,24 +232,25 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll indicator */}
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
+          <div className="w-6 h-10 border-2 border-white/40 rounded-full flex justify-center">
             <motion.div
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="w-1.5 h-3 bg-white rounded-full mt-2"
+              className="w-1.5 h-3 rounded-full mt-2"
+              style={{ background: 'rgb(var(--color-coral))' }}
             />
           </div>
         </motion.div>
       </section>
 
-      {/* Two Ways to Design Section */}
-      <section className="py-20 bg-white">
+      {/* ─────────────────── Three Ways to Design ─────────────────── */}
+      <section className="py-20" style={{ background: 'rgb(var(--color-card))' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -235,299 +259,247 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>
               Three Powerful Ways to Design
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choose instant AI furnishing, blueprint-style layout generation, or full manual control with drag-and-drop customization
+            <p className="text-xl max-w-3xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
+              Choose instant AI furnishing, blueprint-style layout generation, or full manual control — your space, your way.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-12">
-            {/* AI Generation Method */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
+
+            {/* AI Generation */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.7 }}
               className="relative h-full"
             >
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-2xl border-2 border-blue-200 shadow-xl h-full flex flex-col">
+              <div
+                className="p-8 rounded-2xl border-2 shadow-xl h-full flex flex-col"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(233,69,96,0.04) 0%, rgba(233,69,96,0.08) 100%)',
+                  borderColor: 'rgba(233,69,96,0.30)',
+                }}
+              >
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mr-4">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center mr-4"
+                    style={{ background: 'rgb(var(--color-coral))' }}
+                  >
                     <Sparkles className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">AI Generation</h3>
-                    <p className="text-blue-600 font-semibold">Fast & Automatic</p>
+                    <h3 className="text-2xl font-bold" style={{ color: 'rgb(var(--color-navy))' }}>AI Generation</h3>
+                    <p className="font-semibold" style={{ color: 'rgb(var(--color-coral))' }}>Fast & Automatic</p>
                   </div>
                 </div>
 
-                {/* Before/After Visual */}
                 <div className="mb-6 grid grid-cols-2 gap-3">
                   <div className="relative">
-                    <div className="absolute -top-2 -left-2 bg-gray-700 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
-                      Before
-                    </div>
-                    <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center border-2 border-gray-300">
-                      <div className="text-center">
-                        <div className="text-4xl mb-1">🏠</div>
-                        <p className="text-xs text-gray-600">Empty Room</p>
-                      </div>
+                    <div className="absolute -top-2 -left-2 text-white px-3 py-1 rounded-full text-xs font-bold z-10" style={{ background: 'rgb(var(--color-navy))' }}>Before</div>
+                    <div className="aspect-[4/3] rounded-xl flex items-center justify-center border-2" style={{ background: 'rgba(235,234,230,0.8)', borderColor: 'rgb(var(--border-primary))' }}>
+                      <div className="text-center"><div className="text-4xl mb-1">🏠</div><p className="text-xs" style={{ color: 'rgb(var(--fg-tertiary))' }}>Empty Room</p></div>
                     </div>
                   </div>
                   <div className="relative">
-                    <div className="absolute -top-2 -left-2 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
-                      After
-                    </div>
-                    <img
-                      src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400"
-                      alt="AI Generated Room"
-                      className="w-full aspect-[4/3] object-cover rounded-xl shadow-lg border-2 border-green-500"
-                    />
+                    <div className="absolute -top-2 -left-2 text-white px-3 py-1 rounded-full text-xs font-bold z-10" style={{ background: 'rgb(var(--color-coral))' }}>After</div>
+                    <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400" alt="AI Generated" className="w-full aspect-[4/3] object-cover rounded-xl shadow-lg border-2" style={{ borderColor: 'rgb(var(--color-coral))' }} />
                   </div>
                 </div>
 
-                {/* Workflow Steps */}
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-start bg-white p-4 rounded-xl shadow">
-                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
-                      1
+                <div className="space-y-3 mb-6 flex-grow">
+                  {['Upload Your Room Image', 'Describe Your Vision', 'Get Instant Results'].map((step, i) => (
+                    <div key={i} className="flex items-start p-4 rounded-xl shadow-sm" style={{ background: 'rgb(var(--color-card))' }}>
+                      <div className="w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0" style={{ background: 'rgb(var(--color-coral))' }}>{i + 1}</div>
+                      <div>
+                        <h4 className="font-bold mb-1" style={{ color: 'rgb(var(--fg-primary))' }}>{step}</h4>
+                        <p className="text-sm" style={{ color: 'rgb(var(--fg-secondary))' }}>
+                          {['Take a picture of your empty room', 'Tell AI your style preferences', 'AI generates furnished room + smart pricing'][i]}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">Upload Your Room Image</h4>
-                      <p className="text-sm text-gray-600">Take a picture of your empty room</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start bg-white p-4 rounded-xl shadow">
-                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
-                      2
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">Describe Your Vision</h4>
-                      <p className="text-sm text-gray-600">Tell AI your style: "Modern living room with grey sofa"</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start bg-white p-4 rounded-xl shadow">
-                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
-                      3
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">Get Instant Results</h4>
-                      <p className="text-sm text-gray-600">AI generates furnished room + smart pricing</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
                 <Link to="/ai-generate">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center group mt-auto"
+                    className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 group mt-auto transition-all"
+                    style={{ background: 'rgb(var(--color-coral))' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgb(var(--color-coral-hover))'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'rgb(var(--color-coral))'}
                   >
-                    <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                    <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                     Try AI Generation
                   </motion.button>
                 </Link>
               </div>
             </motion.div>
 
-            {/* 2D Layout Generation Method */}
+            {/* 2D Layouts */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.05 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
               className="relative h-full"
             >
-              <div className="bg-gradient-to-br from-cyan-50 to-sky-50 p-8 rounded-2xl border-2 border-cyan-200 shadow-xl h-full flex flex-col">
+              <div
+                className="p-8 rounded-2xl border-2 shadow-xl h-full flex flex-col"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(26,26,46,0.03) 0%, rgba(26,26,46,0.07) 100%)',
+                  borderColor: 'rgba(26,26,46,0.20)',
+                }}
+              >
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-cyan-600 rounded-xl flex items-center justify-center mr-4">
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style={{ background: 'rgb(var(--color-navy))' }}>
                     <Building2 className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">2D Layouts</h3>
-                    <p className="text-cyan-700 font-semibold">Fast Concept Planning</p>
+                    <h3 className="text-2xl font-bold" style={{ color: 'rgb(var(--color-navy))' }}>2D Layouts</h3>
+                    <p className="font-semibold" style={{ color: 'rgb(var(--fg-secondary))' }}>Fast Concept Planning</p>
                   </div>
                 </div>
 
                 <div className="mb-6 grid grid-cols-2 gap-3">
-                  <div className="rounded-xl border-2 border-slate-300 bg-white p-4">
-                    <div className="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 mb-3">
-                      Inputs
-                    </div>
-                    <div className="space-y-3 text-sm text-slate-600">
-                      <div className="rounded-lg bg-slate-100 px-3 py-2 font-semibold text-slate-800">1200 sq ft</div>
-                      <div className="rounded-lg bg-slate-100 px-3 py-2 font-semibold text-slate-800">2 BHK</div>
-                      <div className="rounded-lg bg-slate-100 px-3 py-2 font-semibold text-slate-800">AI decides zoning</div>
+                  <div className="rounded-xl border-2 p-4" style={{ borderColor: 'rgb(var(--border-primary))', background: 'rgb(var(--color-card))' }}>
+                    <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'rgb(var(--fg-tertiary))' }}>Inputs</div>
+                    <div className="space-y-2 text-sm">
+                      {['1200 sq ft', '2 BHK', 'AI decides zoning'].map(t => (
+                        <div key={t} className="rounded-lg px-3 py-2 font-semibold" style={{ background: 'rgb(var(--bg-secondary))', color: 'rgb(var(--fg-primary))' }}>{t}</div>
+                      ))}
                     </div>
                   </div>
-                  <div className="rounded-xl border-2 border-cyan-300 bg-white p-4 shadow-lg">
-                    <div className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-700 mb-3">
-                      Output
-                    </div>
+                  <div className="rounded-xl border-2 p-4 shadow-lg" style={{ borderColor: 'rgba(26,26,46,0.25)', background: 'rgb(var(--color-card))' }}>
+                    <div className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'rgb(var(--color-navy))' }}>Output</div>
                     <div className="grid grid-cols-2 gap-2">
-                      {[1, 2, 3, 4].map((plan) => (
-                        <div key={plan} className="aspect-square rounded-lg border border-slate-300 bg-[linear-gradient(135deg,#ffffff,#f1f5f9)] p-2">
-                          <div className="h-full w-full rounded border-2 border-slate-800 border-dashed" />
+                      {[1, 2, 3, 4].map(p => (
+                        <div key={p} className="aspect-square rounded-lg border p-2" style={{ borderColor: 'rgb(var(--border-primary))', background: 'rgb(var(--bg-secondary))' }}>
+                          <div className="h-full w-full rounded border-2 border-dashed" style={{ borderColor: 'rgb(var(--color-navy))' }} />
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-4 mb-6 flex-grow">
-                  <div className="flex items-start bg-white p-4 rounded-xl shadow">
-                    <div className="w-8 h-8 bg-cyan-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
-                      1
+                <div className="space-y-3 mb-6 flex-grow">
+                  {['Enter Area & Room Count', 'Generate 4 Variations', 'Download the Best Option'].map((step, i) => (
+                    <div key={i} className="flex items-start p-4 rounded-xl shadow-sm" style={{ background: 'rgb(var(--color-card))' }}>
+                      <div className="w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0" style={{ background: 'rgb(var(--color-navy))' }}>{i + 1}</div>
+                      <div>
+                        <h4 className="font-bold mb-1" style={{ color: 'rgb(var(--fg-primary))' }}>{step}</h4>
+                        <p className="text-sm" style={{ color: 'rgb(var(--fg-secondary))' }}>
+                          {['Set the total footprint and BHK requirement.', 'Compare multiple plan directions in one shot.', 'Export any PNG floor plan for your next review.'][i]}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">Enter Area & Room Count</h4>
-                      <p className="text-sm text-gray-600">Set the total footprint and optionally pin the BHK requirement.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start bg-white p-4 rounded-xl shadow">
-                    <div className="w-8 h-8 bg-cyan-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
-                      2
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">Generate 4 Variations</h4>
-                      <p className="text-sm text-gray-600">Compare multiple plan directions in one response instead of iterating one by one.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start bg-white p-4 rounded-xl shadow">
-                    <div className="w-8 h-8 bg-cyan-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
-                      3
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">Download the Best Option</h4>
-                      <p className="text-sm text-gray-600">Export any PNG floor plan and take it into the next design review.</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
                 <Link to="/generate-layout">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-cyan-600 text-white py-3 rounded-xl font-semibold hover:bg-cyan-700 transition-colors flex items-center justify-center group mt-auto"
+                    className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 group mt-auto transition-all"
+                    style={{ background: 'rgb(var(--color-navy))' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgb(var(--color-navy-light))'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'rgb(var(--color-navy))'}
                   >
-                    <Building2 className="w-5 h-5 mr-2 group-hover:-rotate-6 transition-transform" />
+                    <Building2 className="w-5 h-5 group-hover:-rotate-6 transition-transform" />
                     Generate Layouts
                   </motion.button>
                 </Link>
               </div>
             </motion.div>
 
-            {/* Drag & Drop Customization Method */}
+            {/* Drag & Drop */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.7 }}
               className="relative h-full"
             >
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-2xl border-2 border-green-200 shadow-xl h-full flex flex-col">
+              <div
+                className="p-8 rounded-2xl border-2 shadow-xl h-full flex flex-col"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(233,69,96,0.04) 0%, rgba(26,26,46,0.04) 100%)',
+                  borderColor: 'rgba(233,69,96,0.20)',
+                }}
+              >
                 <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mr-4">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center mr-4"
+                    style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral)), rgb(var(--color-navy)))' }}
+                  >
                     <PaintBucket className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">Drag & Drop</h3>
-                    <p className="text-green-600 font-semibold">Full Control</p>
+                    <h3 className="text-2xl font-bold" style={{ color: 'rgb(var(--color-navy))' }}>Drag & Drop</h3>
+                    <p className="font-semibold" style={{ color: 'rgb(var(--color-coral))' }}>Full Control</p>
                   </div>
                 </div>
 
-                {/* Before/After Visual */}
                 <div className="mb-6 grid grid-cols-2 gap-3">
                   <div className="relative">
-                    <div className="absolute -top-2 -left-2 bg-gray-700 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
-                      Before
-                    </div>
-                    <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center border-2 border-gray-300">
-                      <div className="text-center">
-                        <div className="text-4xl mb-1">🏠</div>
-                        <p className="text-xs text-gray-600">Empty Room</p>
-                      </div>
+                    <div className="absolute -top-2 -left-2 text-white px-3 py-1 rounded-full text-xs font-bold z-10" style={{ background: 'rgb(var(--color-navy))' }}>Before</div>
+                    <div className="aspect-[4/3] rounded-xl flex items-center justify-center border-2" style={{ background: 'rgba(235,234,230,0.8)', borderColor: 'rgb(var(--border-primary))' }}>
+                      <div className="text-center"><div className="text-4xl mb-1">🏠</div><p className="text-xs" style={{ color: 'rgb(var(--fg-tertiary))' }}>Empty Room</p></div>
                     </div>
                   </div>
                   <div className="relative">
-                    <div className="absolute -top-2 -left-2 bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
-                      After
-                    </div>
-                    <div className="relative rounded-xl shadow-lg overflow-hidden border-2 border-green-500">
-                      <img
-                        src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400"
-                        alt="Drag & Drop Customized Room"
-                        className="w-full aspect-[4/3] object-cover"
-                      />
-                      {/* Furniture overlay badges */}
+                    <div className="absolute -top-2 -left-2 text-white px-3 py-1 rounded-full text-xs font-bold z-10" style={{ background: 'rgb(var(--color-coral))' }}>After</div>
+                    <div className="relative rounded-xl shadow-lg overflow-hidden border-2" style={{ borderColor: 'rgb(var(--color-coral))' }}>
+                      <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=400" alt="Customized Room" className="w-full aspect-[4/3] object-cover" />
                       <div className="absolute bottom-2 left-2 flex gap-1">
-                        <span className="text-lg bg-white/30 p-1 rounded backdrop-blur-sm">🛋️</span>
-                        <span className="text-lg bg-white/30 p-1 rounded backdrop-blur-sm">🪑</span>
-                        <span className="text-lg bg-white/30 p-1 rounded backdrop-blur-sm">🏮</span>
+                        {['🛋️', '🪑', '🏮'].map(e => (
+                          <span key={e} className="text-lg p-1 rounded backdrop-blur-sm" style={{ background: 'rgba(255,255,255,0.25)' }}>{e}</span>
+                        ))}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Workflow Steps */}
-                <div className="space-y-4 mb-6 flex-grow">
-                  <div className="flex items-start bg-white p-4 rounded-xl shadow">
-                    <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
-                      1
+                <div className="space-y-3 mb-6 flex-grow">
+                  {['Upload Room Image', 'Drag Furniture Items', 'Arrange & Get Pricing'].map((step, i) => (
+                    <div key={i} className="flex items-start p-4 rounded-xl shadow-sm" style={{ background: 'rgb(var(--color-card))' }}>
+                      <div
+                        className="w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0"
+                        style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral)), rgb(var(--color-navy)))' }}
+                      >{i + 1}</div>
+                      <div>
+                        <h4 className="font-bold mb-1" style={{ color: 'rgb(var(--fg-primary))' }}>{step}</h4>
+                        <p className="text-sm" style={{ color: 'rgb(var(--fg-secondary))' }}>
+                          {['Set your room as the canvas', 'Browse catalog & drag items (sofa, table, decor)', 'Position, resize & see live total cost'][i]}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">Upload Room Image</h4>
-                      <p className="text-sm text-gray-600">Set your room as the canvas</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start bg-white p-4 rounded-xl shadow">
-                    <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
-                      2
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">Drag Furniture Items</h4>
-                      <p className="text-sm text-gray-600">Browse catalog & drag items (sofa, table, decor)</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start bg-white p-4 rounded-xl shadow">
-                    <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 flex-shrink-0">
-                      3
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-1">Arrange & Get Pricing</h4>
-                      <p className="text-sm text-gray-600">Position, resize & see live total cost</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
                 <Link to="/customize">
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-colors flex items-center justify-center group mt-auto"
+                    className="w-full py-3 rounded-xl font-semibold text-white flex items-center justify-center gap-2 group mt-auto transition-all"
+                    style={{ background: 'linear-gradient(135deg, rgb(var(--color-coral)), rgb(var(--color-navy)))' }}
                   >
-                    <PaintBucket className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                    <PaintBucket className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                     Start Customizing
                   </motion.button>
                 </Link>
               </div>
             </motion.div>
           </div>
-
-
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      {/* ─────────────────── Features Section ─────────────────── */}
+      <section className="py-20" style={{ background: 'rgb(var(--bg-secondary))' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -536,31 +508,34 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>
               Powerful Features
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
               Everything you need to design, visualize, and plan your perfect room
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                transition={{ duration: 0.6, delay: index * 0.08 }}
+                className="feature-card text-center"
               >
-                <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 mx-auto"
+                  style={{ background: 'rgb(var(--color-coral))' }}
+                >
                   <feature.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold mb-2" style={{ color: 'rgb(var(--fg-primary))' }}>
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-sm" style={{ color: 'rgb(var(--fg-secondary))' }}>
                   {feature.description}
                 </p>
               </motion.div>
@@ -569,8 +544,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Gallery Section */}
-      <section className="py-20 bg-white">
+      {/* ─────────────────── Gallery Section ─────────────────── */}
+      <section className="py-20" style={{ background: 'rgb(var(--color-card))' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -579,10 +554,10 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>
               Inspiration Gallery
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
               See what's possible with Homelytics
             </p>
           </motion.div>
@@ -594,15 +569,19 @@ export default function Home() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
                 className="relative overflow-hidden rounded-xl shadow-lg group cursor-pointer"
+                style={{ border: '1px solid rgb(var(--color-card-border))' }}
               >
                 <img
                   src={image}
                   alt={`Gallery ${index + 1}`}
                   className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4"
+                  style={{ background: 'linear-gradient(to top, rgba(26,26,46,0.75) 0%, transparent 100%)' }}
+                >
                   <span className="text-white font-semibold">View Design</span>
                 </div>
               </motion.div>
@@ -611,8 +590,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      {/* ─────────────────── Testimonials ─────────────────── */}
+      <section className="py-20" style={{ background: 'rgb(var(--bg-secondary))' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -621,10 +600,10 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'rgb(var(--color-navy))' }}>
               What Our Users Say
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl max-w-2xl mx-auto" style={{ color: 'rgb(var(--fg-secondary))' }}>
               Join thousands of happy users transforming their spaces
             </p>
           </motion.div>
@@ -637,52 +616,59 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white p-6 rounded-xl shadow-lg"
+                className="p-6 rounded-xl shadow-base interactive-surface"
+                style={{
+                  background: 'rgb(var(--color-card))',
+                  border: '1px solid rgb(var(--color-card-border))',
+                  boxShadow: 'var(--shadow-base)',
+                }}
               >
                 <div className="flex items-center mb-4">
                   <img
                     src={testimonial.image}
                     alt={testimonial.name}
                     className="w-12 h-12 rounded-full mr-4"
+                    style={{ border: '2px solid rgb(var(--color-coral))' }}
                   />
                   <div>
-                    <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-600">{testimonial.role}</p>
+                    <h4 className="font-semibold" style={{ color: 'rgb(var(--fg-primary))' }}>{testimonial.name}</h4>
+                    <p className="text-sm" style={{ color: 'rgb(var(--fg-tertiary))' }}>{testimonial.role}</p>
                   </div>
                 </div>
                 <div className="flex mb-3">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                    <Star key={i} className="w-4 h-4 fill-current" style={{ color: 'rgb(var(--color-coral))' }} />
                   ))}
                 </div>
-                <p className="text-gray-700 italic">"{testimonial.text}"</p>
+                <p className="italic text-sm leading-relaxed" style={{ color: 'rgb(var(--fg-secondary))' }}>
+                  "{testimonial.text}"
+                </p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* ─────────────────── CTA Section ─────────────────── */}
       <section className="relative py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-600">
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, rgb(var(--color-navy)) 0%, rgb(40 20 50) 50%, rgb(var(--color-coral)) 100%)' }}
+        >
           <motion.div
-            animate={{
-              scale: [1, 1.3, 1],
-              rotate: [0, 90, 0],
-            }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-20 -left-20 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl"
+            animate={{ scale: [1, 1.3, 1], rotate: [0, 90, 0] }}
+            transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+            className="absolute -top-20 -left-20 w-96 h-96 rounded-full blur-3xl"
+            style={{ background: 'rgba(233,69,96,0.20)' }}
           />
           <motion.div
-            animate={{
-              scale: [1.3, 1, 1.3],
-              rotate: [0, -90, 0],
-            }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute -bottom-20 -right-20 w-96 h-96 bg-blue-400/30 rounded-full blur-3xl"
+            animate={{ scale: [1.3, 1, 1.3], rotate: [0, -90, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full blur-3xl"
+            style={{ background: 'rgba(248,247,244,0.06)' }}
           />
         </div>
-        
+
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -702,11 +688,12 @@ export default function Home() {
             </p>
             <Link to="/ai-generate">
               <motion.div
-                whileHover={{ scale: 1.1, boxShadow: "0 30px 60px rgba(0,0,0,0.4)" }}
+                whileHover={{ scale: 1.08, boxShadow: '0 30px 60px rgba(0,0,0,0.35)' }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-10 py-5 bg-white text-gray-900 rounded-2xl font-bold text-xl shadow-2xl group"
+                className="inline-flex items-center px-10 py-5 rounded-2xl font-bold text-xl shadow-2xl group cursor-pointer"
+                style={{ background: '#fff', color: 'rgb(var(--color-navy))' }}
               >
-                <Sparkles className="w-7 h-7 mr-3 text-blue-600 group-hover:rotate-12 group-hover:scale-110 transition-all" />
+                <Sparkles className="w-7 h-7 mr-3 group-hover:rotate-12 group-hover:scale-110 transition-all" style={{ color: 'rgb(var(--color-coral))' }} />
                 Get Started Free
                 <ChevronRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
               </motion.div>
